@@ -23,6 +23,11 @@ public class ArticleServiceImpl implements ArticleService {
         return articles.stream().map(this::mapToArticleDto).collect(Collectors.toList());
     }
 
+    @Override
+    public Article saveArticle(Article article) {
+        return articleRepository.save(article);
+    }
+
     private ArticleDto mapToArticleDto(Article article) {
         return ArticleDto.builder()
                 .id(article.getId())

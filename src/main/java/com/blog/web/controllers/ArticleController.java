@@ -6,6 +6,8 @@ import com.blog.web.services.ArticleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 
@@ -29,5 +31,11 @@ public class ArticleController {
         Article article = new Article();
         model.addAttribute("article", article);
         return "articles/new";
+    }
+
+    @PostMapping("/articles/new")
+    public String saveArticle(@ModelAttribute("article") Article article) {
+        articleService.saveArticle(article);
+        return "redirect:/articles";
     }
 }
