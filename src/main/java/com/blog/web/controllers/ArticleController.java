@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
@@ -37,5 +38,24 @@ public class ArticleController {
     public String saveArticle(@ModelAttribute("article") Article article) {
         articleService.saveArticle(article);
         return "redirect:/articles";
+    }
+
+    @GetMapping("/articles/edit/{articleId}")
+    public String editArticleForm(@PathVariable("articleId") long articleId, Model model) {
+        ArticleDto article = articleService.findArticleById(articleId);
+        model.addAttribute("article", article);
+        return "articles/edit";
+    }
+
+    @PostMapping("/articles/edit/{articleId}")
+    public String updateArticle(@PathVariable("articleId") Long articleId, @ModelAttribute("article") ArticleDto article) {
+        article.setId(articleId);
+        articleService.updateArticle(article);
+        return "redirect:/articles";
+    }
+
+    @GetMapping("/articles")
+    public String getArticles() {
+        return "redirect:/";
     }
 }

@@ -9,4 +9,8 @@ public interface ArticleService {
     List<ArticleDto> findAllArticles();
 
     Article saveArticle(Article article);
+
+    ArticleDto findArticleById(long articleId);
+
+    void updateArticle(ArticleDto articleDto);
 }

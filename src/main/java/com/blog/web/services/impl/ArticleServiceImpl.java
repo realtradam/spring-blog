@@ -28,6 +28,29 @@ public class ArticleServiceImpl implements ArticleService {
         return articleRepository.save(article);
     }
 
+    @Override
+    public ArticleDto findArticleById(long articleId) {
+        Article article = articleRepository.findById(articleId).get();
+        return mapToArticleDto(article);
+    }
+
+    @Override
+    public void updateArticle(ArticleDto articleDto) {
+        Article article = mapToArticle(articleDto);
+    }
+
+    private Article mapToArticle(ArticleDto articleDto) {
+        Article article = Article.builder()
+                .id(articleDto.getId())
+                .title(articleDto.getTitle())
+                .photoUrl(articleDto.getPhotoUrl())
+                .content(articleDto.getContent())
+                .createdOn(articleDto.getCreatedOn())
+                .updatedOn(articleDto.getUpdatedOn())
+                .build();
+        return article;
+    }
+
     private ArticleDto mapToArticleDto(Article article) {
         return ArticleDto.builder()
                 .id(article.getId())
