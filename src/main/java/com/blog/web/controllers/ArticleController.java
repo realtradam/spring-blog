@@ -7,10 +7,7 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -28,6 +25,13 @@ public class ArticleController {
         List<ArticleDto> articles = articleService.findAllArticles();
         model.addAttribute("articles", articles);
         return "index";
+    }
+
+    @GetMapping("/articles/{articleId}")
+    public String showArticle(@PathVariable("articleId") long articleId, Model model) {
+        ArticleDto articleDto = articleService.findArticleById(articleId);
+        model.addAttribute("article", articleDto);
+        return "articles/show";
     }
 
     @GetMapping("/articles/new")
@@ -49,6 +53,12 @@ public class ArticleController {
         return "redirect:/articles";
     }
 
+    @GetMapping("/articles/delete/{articleId}")
+    public String deleteArticle(@PathVariable("articleId") Long articleId) {
+        articleService.delete(articleId);
+        return "redirect:/articles";
+    }
+
     @GetMapping("/articles/edit/{articleId}")
     public String editArticleForm(@PathVariable("articleId") long articleId, Model model) {
         ArticleDto articleDto = articleService.findArticleById(articleId);
@@ -66,6 +76,13 @@ public class ArticleController {
         article.setId(articleId);
         articleService.updateArticle(article);
         return "redirect:/articles";
+    }
+
+    @GetMapping("/articles/search")
+    public String searchArticle(@RequestParam(value = "search") String search, Model model) {
+        List<ArticleDto> articles = articleService.searchArticles(search);
+        model.addAttribute("articles", articles);
+        return "index";
     }
 
     @GetMapping("/articles")

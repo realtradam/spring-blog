@@ -13,4 +13,8 @@ public interface ArticleService {
     ArticleDto findArticleById(long articleId);
 
     void updateArticle(ArticleDto articleDto);
+
+    void delete(Long articleId);
+
+    List<ArticleDto> searchArticles(String search);
 }

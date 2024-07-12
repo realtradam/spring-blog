@@ -41,6 +41,17 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.save(article);
     }
 
+    @Override
+    public void delete(Long articleId) {
+        articleRepository.deleteById(articleId);
+    }
+
+    @Override
+    public List<ArticleDto> searchArticles(String search) {
+        List<Article> articles = articleRepository.searchArticles(search);
+        return articles.stream().map(article -> mapToArticleDto(article)).collect(Collectors.toList());
+    }
+
     private Article mapToArticle(ArticleDto articleDto) {
         Article article = Article.builder()
                 .id(articleDto.getId())
