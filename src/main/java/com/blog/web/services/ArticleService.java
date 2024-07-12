@@ -8,7 +8,7 @@ import java.util.List;
 public interface ArticleService {
     List<ArticleDto> findAllArticles();
 
-    Article saveArticle(Article article);
+    Article saveArticle(ArticleDto article);
 
     ArticleDto findArticleById(long articleId);
 

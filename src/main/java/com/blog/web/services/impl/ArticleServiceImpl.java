@@ -24,7 +24,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Article saveArticle(Article article) {
+    public Article saveArticle(ArticleDto articleDto) {
+        Article article = mapToArticle(articleDto);
         return articleRepository.save(article);
     }
 
