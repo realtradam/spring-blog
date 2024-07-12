@@ -37,6 +37,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void updateArticle(ArticleDto articleDto) {
         Article article = mapToArticle(articleDto);
+        articleRepository.save(article);
     }
 
     private Article mapToArticle(ArticleDto articleDto) {
