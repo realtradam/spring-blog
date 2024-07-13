@@ -20,7 +20,7 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/articles")
     public String listArticles(Model model) {
         List<ArticleDto> articles = articleService.findAllArticles();
         model.addAttribute("articles", articles);
@@ -85,8 +85,8 @@ public class ArticleController {
         return "index";
     }
 
-    @GetMapping("/articles")
+    @GetMapping("/")
     public String getArticles() {
-        return "redirect:/";
+        return "redirect:/articles";
     }
 }

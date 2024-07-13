@@ -5,6 +5,7 @@ import com.blog.web.models.Article;
 
 import java.util.List;
 
+
 public interface ArticleService {
     List<ArticleDto> findAllArticles();
 
