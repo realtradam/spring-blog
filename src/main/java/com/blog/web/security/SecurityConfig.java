@@ -32,7 +32,7 @@ public class SecurityConfig {
         http.csrf(c -> c.disable())
                 .cors(c -> c.disable())
                 .authorizeHttpRequests( auths -> auths
-                        .requestMatchers("/login", "/register", "/articles", "/css/**", "/js/**")
+                        .anyRequest()
                         .permitAll()
                 )
                 .formLogin(form -> form
