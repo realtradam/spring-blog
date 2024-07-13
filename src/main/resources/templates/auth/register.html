@@ -8,7 +8,7 @@
 
 <div class="flex justify-center bg-white p-12">
     <div th:if="${param.fail}" class="text-xl p-4 bg-black text-red-500">Username or Email already exists</div>
-    <form th:action="@{/register/save}" th:object="${user}" method="post" class="w-full max-w-lg">
+    <form th:action="@{/register/save}" th:object="${user}" role="form" method="post" class="w-full max-w-lg">
         <div class="flex flex-wrap -mx-3 mb-6">
             <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -54,7 +54,7 @@
         </div>
         <div class="flex flex-wrap mb-2">
         </div>
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Register</button>
+        <button th:href="@{/register}" type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Register</button>
 
     </form>
 </div>
