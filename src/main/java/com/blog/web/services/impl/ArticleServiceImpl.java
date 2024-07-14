@@ -2,7 +2,10 @@ package com.blog.web.services.impl;
 
 import com.blog.web.dto.ArticleDto;
 import com.blog.web.models.Article;
+import com.blog.web.models.UserEntity;
 import com.blog.web.repository.ArticleRepository;
+import com.blog.web.repository.UserRepository;
+import com.blog.web.security.SecurityUtil;
 import com.blog.web.services.ArticleService;
 import org.springframework.stereotype.Service;
 
@@ -11,11 +14,13 @@ import java.util.stream.Collectors;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
-    public ArticleServiceImpl(com.blog.web.repository.ArticleRepository articleRepository) {
+    public ArticleServiceImpl(com.blog.web.repository.ArticleRepository articleRepository, com.blog.web.repository.UserRepository userRepository) {
+        this.userRepository = userRepository;
         this.articleRepository = articleRepository;
     }
 
     private ArticleRepository articleRepository;
+    private UserRepository userRepository;
 
     @Override
     public List<ArticleDto> findAllArticles() {
@@ -25,7 +30,10 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public Article saveArticle(ArticleDto articleDto) {
+        String username = SecurityUtil.getSessionUser();
+        UserEntity user = userRepository.findByUsername(username);
         Article article = mapToArticle(articleDto);
+        article.setCreatedBy(user);
         return articleRepository.save(article);
     }
 
@@ -37,7 +45,10 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void updateArticle(ArticleDto articleDto) {
+        String username = SecurityUtil.getSessionUser();
+        UserEntity user = userRepository.findByUsername(username);
         Article article = mapToArticle(articleDto);
+        article.setCreatedBy(user);
         articleRepository.save(article);
     }
 
@@ -58,6 +69,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .title(articleDto.getTitle())
                 .photoUrl(articleDto.getPhotoUrl())
                 .content(articleDto.getContent())
+                .createdBy(articleDto.getCreatedBy())
                 .createdOn(articleDto.getCreatedOn())
                 .updatedOn(articleDto.getUpdatedOn())
                 .build();
@@ -70,6 +82,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .title(article.getTitle())
                 .photoUrl(article.getPhotoUrl())
                 .content(article.getContent())
+                .createdBy(article.getCreatedBy())
                 .createdOn(article.getCreatedOn())
                 .updatedOn(article.getUpdatedOn())
                 .build();
