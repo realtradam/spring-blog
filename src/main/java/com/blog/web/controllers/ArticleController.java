@@ -2,7 +2,10 @@ package com.blog.web.controllers;
 
 import com.blog.web.dto.ArticleDto;
 import com.blog.web.models.Article;
+import com.blog.web.models.UserEntity;
+import com.blog.web.security.SecurityUtil;
 import com.blog.web.services.ArticleService;
+import com.blog.web.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,14 +18,23 @@ import java.util.List;
 @Controller
 public class ArticleController {
     private ArticleService articleService;
+    private UserService userService;
 
-    public ArticleController(ArticleService articleService) {
+    public ArticleController(ArticleService articleService, UserService userService) {
         this.articleService = articleService;
+        this.userService = userService;
     }
 
     @GetMapping("/articles")
     public String listArticles(Model model) {
+        UserEntity user = new UserEntity();
         List<ArticleDto> articles = articleService.findAllArticles();
+        String username = SecurityUtil.getSessionUser();
+        if(username != null) {
+            user = userService.findByUsername(username);
+            model.addAttribute("user", user);
+        }
+        model.addAttribute("user", user);
         model.addAttribute("articles", articles);
         return "index";
     }
