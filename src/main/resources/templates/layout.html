@@ -24,13 +24,16 @@
 <head>
     <meta charset="UTF-8">
 </head>
-<body class="bg-gray-200 font-sans leading-normal tracking-normal">
+<body class="bg-gray-200 min-h-screen font-sans leading-normal tracking-normal">
 
 <nav class="bg-gray-900 p-4 mt-0 w-full">
     <div class="container mx-auto flex items-center">
         <div class="flex text-white font-extrabold">
-            <a class="flex text-white text-base no-underline hover:text-white hover:no-underline" href="#">
-                👻 <span class="hidden w-0 md:w-auto md:block pl-1">Ghostwind CSS</span>
+            <a th:if="${(user == null || user.username == null)}" class="flex text-white text-base no-underline hover:text-white hover:no-underline" href="#">
+                ☕<span class="hidden w-0 md:w-auto md:block pl-1">Spring!</span>
+            </a>
+            <a th:if="${!(user == null || user.username == null)}" class="flex text-white text-base no-underline hover:text-white hover:no-underline" href="#">
+                ☕<span th:text="'Logged in as: ' + ${user.username}" class="hidden w-0 md:w-auto md:block pl-1"></span>
             </a>
         </div>
         <div class="flex pl-4 text-sm place-content-between w-full">
@@ -45,7 +48,8 @@
                     <a class="inline-block text-indigo-200 no-underline hover:text-indigo-100 hover:text-underline py-2 px-2" href="/register">REGISTER</a>
                 </li>
                 <li class="mr-2">
-                    <a class="inline-block text-indigo-200 no-underline hover:text-indigo-100 hover:text-underline py-2 px-2" href="/login">LOGIN</a>
+                    <a th:if="${(user == null || user.username == null)}" class="inline-block text-indigo-200 no-underline hover:text-indigo-100 hover:text-underline py-2 px-2" href="/userlogin">LOGIN</a>
+                    <a th:if="${!(user == null || user.username == null)}" class="inline-block text-indigo-200 no-underline hover:text-indigo-100 hover:text-underline py-2 px-2" href="/logout">LOGOUT</a>
                 </li>
             </ul>
             <form th:action="@{/articles/search}" class="w-full max-w-md">
@@ -68,7 +72,7 @@
     <div class="bg-white">
         <div class="flex flex-wrap items-center content-center">
             <div class="flex w-1/2 justify-start text-white font-extrabold">
-                <a class="flex text-gray-900 no-underline hover:text-gray-900 hover:no-underline pl-2" href="#">
+                <a class="flex text-gray-100 no-underline hover:text-gray-900 hover:no-underline pl-2" href="#">
                     👻 <span class="hidden w-0 md:w-auto md:block pl-1">Ghostwind CSS</span>
                 </a>
             </div>
@@ -90,12 +94,12 @@
 
 <!--Header-->
 <div class="w-full m-0 p-0 bg-cover bg-bottom" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/6/65/Toronto_Skyline_Summer_2020.jpg'); height: 60vh; max-height:460px;">
-    <div class="container max-w-4xl mx-auto pt-16 md:pt-32 text-center break-normal">
+    <div class="container max-w-4xl bg-black bg-opacity-50 pb-16 rounded-b-xl mx-auto pt-16 md:pt-32 text-center break-normal">
         <!--Title-->
         <p class="text-white font-extrabold text-3xl md:text-5xl">
-            👻 Ghostwind CSS
+            ☕ Spring!
         </p>
-        <p class="text-xl md:text-2xl text-gray-500">Welcome to my Blog</p>
+        <p class="text-xl md:text-2xl text-gray-200">Welcome to my Blog</p>
     </div>
 </div>
 
@@ -109,22 +113,22 @@
         <div class="w-full mx-auto flex flex-wrap items-center">
             <div class="flex w-full md:w-1/2 justify-center md:justify-start text-white font-extrabold">
                 <a class="text-gray-900 no-underline hover:text-gray-900 hover:no-underline" href="#">
-                    👻 <span class="text-base text-gray-200">Ghostwind CSS</span>
+                    <span class="text-base text-gray-200"></span>
                 </a>
             </div>
             <div class="flex w-full pt-2 content-center justify-between md:w-1/2 md:justify-end">
                 <ul class="list-reset flex justify-center flex-1 md:flex-none items-center">
                     <li>
-                        <a class="inline-block py-2 px-3 text-white no-underline" href="#">Active</a>
+                        <a class="inline-block py-2 px-3 text-white no-underline" href="#"></a>
                     </li>
                     <li>
-                        <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="#">link</a>
+                        <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="#"></a>
                     </li>
                     <li>
-                        <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="#">link</a>
+                        <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="#"></a>
                     </li>
                     <li>
-                        <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="#">link</a>
+                        <a class="inline-block text-gray-600 no-underline hover:text-gray-200 hover:underline py-2 px-3" href="#"></a>
                     </li>
                 </ul>
             </div>

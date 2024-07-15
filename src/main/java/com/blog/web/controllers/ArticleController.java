@@ -12,7 +12,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Controller
@@ -27,13 +26,8 @@ public class ArticleController {
 
     @GetMapping("/articles")
     public String listArticles(Model model) {
-        UserEntity user = new UserEntity();
         List<ArticleDto> articles = articleService.findAllArticles();
-        String username = SecurityUtil.getSessionUser();
-        if(username != null) {
-            user = userService.findByUsername(username);
-            model.addAttribute("user", user);
-        }
+        UserEntity user = getLoggedInUser();
         model.addAttribute("user", user);
         model.addAttribute("articles", articles);
         return "index";
@@ -43,11 +37,15 @@ public class ArticleController {
     public String showArticle(@PathVariable("articleId") long articleId, Model model) {
         ArticleDto articleDto = articleService.findArticleById(articleId);
         model.addAttribute("article", articleDto);
+        UserEntity user = getLoggedInUser();
+        model.addAttribute("user", user);
         return "articles/show";
     }
 
     @GetMapping("/articles/new")
     public String createArticleForm(Model model) {
+        UserEntity user = getLoggedInUser();
+        model.addAttribute("user", user);
         Article article = new Article();
         model.addAttribute("article", article);
         return "articles/new";
@@ -65,14 +63,30 @@ public class ArticleController {
         return "redirect:/articles";
     }
 
+    private UserEntity getLoggedInUser() {
+        UserEntity user = new UserEntity();
+        String username = SecurityUtil.getSessionUser();
+        if(username != null) {
+            user = userService.findByUsername(username);
+        }
+        return user;
+    }
+
     @GetMapping("/articles/delete/{articleId}")
     public String deleteArticle(@PathVariable("articleId") Long articleId) {
-        articleService.delete(articleId);
+        UserEntity user = getLoggedInUser();
+        ArticleDto article = articleService.findArticleById(articleId);
+        UserEntity owner = article.getCreatedBy();
+        if(owner.getId() == user.getId()) {
+            articleService.delete(articleId);
+        }
         return "redirect:/articles";
     }
 
     @GetMapping("/articles/edit/{articleId}")
     public String editArticleForm(@PathVariable("articleId") long articleId, Model model) {
+        UserEntity user = getLoggedInUser();
+        model.addAttribute("user", user);
         ArticleDto articleDto = articleService.findArticleById(articleId);
         model.addAttribute("article", articleDto);
         return "articles/edit";
@@ -92,9 +106,18 @@ public class ArticleController {
 
     @GetMapping("/articles/search")
     public String searchArticle(@RequestParam(value = "search") String search, Model model) {
+        UserEntity user = getLoggedInUser();
+        model.addAttribute("user", user);
         List<ArticleDto> articles = articleService.searchArticles(search);
         model.addAttribute("articles", articles);
         return "index";
+    }
+
+    @GetMapping("/userlogin")
+    public String login(Model model) {
+        UserEntity user = getLoggedInUser();
+        model.addAttribute("user", user);
+        return "auth/login";
     }
 
     @GetMapping("/")

@@ -36,12 +36,12 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login")
+                        .loginPage("/userlogin")
                         .usernameParameter("username")
                         .passwordParameter("password")
                         .defaultSuccessUrl("/articles")
-                        .loginProcessingUrl("/login")
-                        .failureUrl("/login?error=true")
+                        .loginProcessingUrl("/userlogin")
+                        .failureUrl("/userlogin?error=true")
                         .permitAll()
                 ).logout(
                         logout -> logout

@@ -9,8 +9,8 @@
 <div th:if="${param.error}" class="text-xl p-4 bg-black text-red-500">Invalid Username/Password</div>
 <div th:if="${param.logout}" class="text-xl p-4 bg-black text-red-500">You have been logged out</div>
 
-<div class="flex justify-center bg-white p-12">
-    <form th:action="@{/login}" method="post" class="w-full max-w-lg">
+<div class="flex h-full justify-center bg-white p-12">
+    <form th:action="@{/userlogin}" method="post" class="w-full max-w-lg">
         <div class="flex flex-wrap -mx-3 mb-6">
             <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"

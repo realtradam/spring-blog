@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.blog.web.mappers.ArticleMapper.mapToArticle;
+import static com.blog.web.mappers.ArticleMapper.mapToArticleDto;
+
 @Service
 public class ArticleServiceImpl implements ArticleService {
     public ArticleServiceImpl(com.blog.web.repository.ArticleRepository articleRepository, com.blog.web.repository.UserRepository userRepository) {
@@ -25,7 +28,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<ArticleDto> findAllArticles() {
         List<Article> articles = articleRepository.findAll();
-        return articles.stream().map(this::mapToArticleDto).collect(Collectors.toList());
+        return articles.stream().map((article) -> mapToArticleDto(article)).collect(Collectors.toList());
     }
 
     @Override
@@ -61,30 +64,5 @@ public class ArticleServiceImpl implements ArticleService {
     public List<ArticleDto> searchArticles(String search) {
         List<Article> articles = articleRepository.searchArticles(search);
         return articles.stream().map(article -> mapToArticleDto(article)).collect(Collectors.toList());
-    }
-
-    private Article mapToArticle(ArticleDto articleDto) {
-        Article article = Article.builder()
-                .id(articleDto.getId())
-                .title(articleDto.getTitle())
-                .photoUrl(articleDto.getPhotoUrl())
-                .content(articleDto.getContent())
-                .createdBy(articleDto.getCreatedBy())
-                .createdOn(articleDto.getCreatedOn())
-                .updatedOn(articleDto.getUpdatedOn())
-                .build();
-        return article;
-    }
-
-    private ArticleDto mapToArticleDto(Article article) {
-        return ArticleDto.builder()
-                .id(article.getId())
-                .title(article.getTitle())
-                .photoUrl(article.getPhotoUrl())
-                .content(article.getContent())
-                .createdBy(article.getCreatedBy())
-                .createdOn(article.getCreatedOn())
-                .updatedOn(article.getUpdatedOn())
-                .build();
     }
 }
