@@ -55,6 +55,9 @@ public class ArticleController {
     public String saveArticle(@Valid @ModelAttribute("article") ArticleDto articleDto,
                               BindingResult result,
                               Model model) {
+        if(articleDto.getCreatedBy() == null) {
+            return "redirect:/userlogin";
+        }
         if(result.hasErrors()) {
             model.addAttribute("article", articleDto);
             return "articles/new";
