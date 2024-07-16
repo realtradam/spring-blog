@@ -17,13 +17,14 @@ import static com.blog.web.mappers.ArticleMapper.mapToArticleDto;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
-    public ArticleServiceImpl(com.blog.web.repository.ArticleRepository articleRepository, com.blog.web.repository.UserRepository userRepository) {
+    final private ArticleRepository articleRepository;
+    final private UserRepository userRepository;
+
+    public ArticleServiceImpl(ArticleRepository articleRepository, UserRepository userRepository) {
         this.userRepository = userRepository;
         this.articleRepository = articleRepository;
     }
 
-    private ArticleRepository articleRepository;
-    private UserRepository userRepository;
 
     @Override
     public List<ArticleDto> findAllArticles() {

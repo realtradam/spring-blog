@@ -1,13 +1,7 @@
 package com.blog.web.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.apache.catalina.User;
 
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
 

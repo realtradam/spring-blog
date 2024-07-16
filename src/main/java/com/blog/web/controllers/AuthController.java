@@ -2,8 +2,10 @@ package com.blog.web.controllers;
 
 import com.blog.web.dto.RegistrationDto;
 import com.blog.web.models.UserEntity;
+import com.blog.web.security.SecurityUtil;
 import com.blog.web.services.UserService;
 import jakarta.validation.Valid;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -19,14 +21,16 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @GetMapping("/login")
-    public String loginPage() {
+    @GetMapping("/userlogin")
+    public String login(Model model) {
+        UserEntity user = userService.getLoggedInUser();
+        model.addAttribute("user", user);
         return "auth/login";
     }
 
     @GetMapping("/register")
     public String getRegisterForm(Model model) {
-        RegistrationDto user = new RegistrationDto();
+        final RegistrationDto user = new RegistrationDto();
         model.addAttribute("user", user);
         return "auth/register";
     }
@@ -38,8 +42,7 @@ public class AuthController {
         UserEntity existingUserEmail = userService.findByEmail(user.getEmail());
         if(
                 existingUserEmail != null &&
-                existingUserEmail.getEmail() != null &&
-                !existingUserEmail.getEmail().isEmpty()
+                        StringUtils.isBlank(existingUserEmail.getEmail())
         ) {
             result.rejectValue("email", "There is already a user with this email");
         }
@@ -47,8 +50,7 @@ public class AuthController {
         UserEntity existingUsername = userService.findByUsername(user.getUsername());
         if(
                 existingUsername != null &&
-                existingUsername.getUsername() != null &&
-                !existingUsername.getUsername().isEmpty()
+                        StringUtils.isBlank(existingUsername.getUsername())
         )
         {
             result.rejectValue("username", "There is already a user with this username");

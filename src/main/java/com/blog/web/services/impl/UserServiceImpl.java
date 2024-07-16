@@ -5,17 +5,17 @@ import com.blog.web.models.Role;
 import com.blog.web.models.UserEntity;
 import com.blog.web.repository.RoleRepository;
 import com.blog.web.repository.UserRepository;
+import com.blog.web.security.SecurityUtil;
 import com.blog.web.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import java.util.Arrays;
 
 @Service
 public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
-    private RoleRepository roleRepository;
-    private PasswordEncoder passwordEncoder;
+    final private UserRepository userRepository;
+    final private RoleRepository roleRepository;
+    final private PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(
             UserRepository userRepository,
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         //user.setPassword(registrationDto.getPassword());
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 
-        Role role = roleRepository.findByName("User");
+        final Role role = roleRepository.findByName("User");
         user.setRoles(Arrays.asList(role));
         userRepository.save(user);
     }
@@ -49,5 +49,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public UserEntity getLoggedInUser() {
+        final UserEntity user;
+        String username = SecurityUtil.getSessionUser();
+        if(username != null) {
+            user = this.findByUsername(username);
+        }
+        else {
+            user = new UserEntity();
+        }
+        return user;
     }
 }

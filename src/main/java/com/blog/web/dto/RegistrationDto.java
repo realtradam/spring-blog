@@ -2,9 +2,6 @@ package com.blog.web.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
 
 public class RegistrationDto {
     private Long id;

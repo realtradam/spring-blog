@@ -27,7 +27,7 @@ public class ArticleController {
     @GetMapping("/articles")
     public String listArticles(Model model) {
         List<ArticleDto> articles = articleService.findAllArticles();
-        UserEntity user = getLoggedInUser();
+        UserEntity user = userService.getLoggedInUser();
         model.addAttribute("user", user);
         model.addAttribute("articles", articles);
         return "index";
@@ -37,16 +37,16 @@ public class ArticleController {
     public String showArticle(@PathVariable("articleId") long articleId, Model model) {
         ArticleDto articleDto = articleService.findArticleById(articleId);
         model.addAttribute("article", articleDto);
-        UserEntity user = getLoggedInUser();
+        UserEntity user = userService.getLoggedInUser();
         model.addAttribute("user", user);
         return "articles/show";
     }
 
     @GetMapping("/articles/new")
     public String createArticleForm(Model model) {
-        UserEntity user = getLoggedInUser();
+        UserEntity user = userService.getLoggedInUser();
         model.addAttribute("user", user);
-        Article article = new Article();
+        final Article article = new Article();
         model.addAttribute("article", article);
         return "articles/new";
     }
@@ -54,33 +54,31 @@ public class ArticleController {
     @PostMapping("/articles/new")
     public String saveArticle(@Valid @ModelAttribute("article") ArticleDto articleDto,
                               BindingResult result,
-                              Model model) {
-        if(articleDto.getCreatedBy() == null) {
+                              Model model)
+    {
+        // if un-logged in user tries to create an article
+        // redirect them to login page
+        UserEntity user = userService.getLoggedInUser();
+        if(userService.getLoggedInUser().getId() == null) {
             return "redirect:/userlogin";
         }
-        if(result.hasErrors()) {
+        else if(result.hasErrors()) {
             model.addAttribute("article", articleDto);
             return "articles/new";
         }
-        articleService.saveArticle(articleDto);
-        return "redirect:/articles";
+        else {
+            articleService.saveArticle(articleDto);
+            return "redirect:/articles";
+        }
     }
 
-    private UserEntity getLoggedInUser() {
-        UserEntity user = new UserEntity();
-        String username = SecurityUtil.getSessionUser();
-        if(username != null) {
-            user = userService.findByUsername(username);
-        }
-        return user;
-    }
 
     @GetMapping("/articles/delete/{articleId}")
     public String deleteArticle(@PathVariable("articleId") Long articleId) {
-        UserEntity user = getLoggedInUser();
+        UserEntity user = userService.getLoggedInUser();
         ArticleDto article = articleService.findArticleById(articleId);
         UserEntity owner = article.getCreatedBy();
-        if(owner.getId() == user.getId()) {
+        if(owner.equals(user)) {
             articleService.delete(articleId);
         }
         return "redirect:/articles";
@@ -88,7 +86,7 @@ public class ArticleController {
 
     @GetMapping("/articles/edit/{articleId}")
     public String editArticleForm(@PathVariable("articleId") long articleId, Model model) {
-        UserEntity user = getLoggedInUser();
+        UserEntity user = userService.getLoggedInUser();
         model.addAttribute("user", user);
         ArticleDto articleDto = articleService.findArticleById(articleId);
         model.addAttribute("article", articleDto);
@@ -109,19 +107,13 @@ public class ArticleController {
 
     @GetMapping("/articles/search")
     public String searchArticle(@RequestParam(value = "search") String search, Model model) {
-        UserEntity user = getLoggedInUser();
+        UserEntity user = userService.getLoggedInUser();
         model.addAttribute("user", user);
         List<ArticleDto> articles = articleService.searchArticles(search);
         model.addAttribute("articles", articles);
         return "index";
     }
 
-    @GetMapping("/userlogin")
-    public String login(Model model) {
-        UserEntity user = getLoggedInUser();
-        model.addAttribute("user", user);
-        return "auth/login";
-    }
 
     @GetMapping("/")
     public String getArticles() {
