@@ -1,5 +1,6 @@
 package com.blog.web.dto;
 
+import com.blog.web.models.Article;
 import com.blog.web.models.UserEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -47,6 +48,16 @@ public class ArticleDto {
     }
 
     public ArticleDto() {};
+
+    public ArticleDto(Article article) {
+        this.id = article.getId();
+        this.title = article.getTitle();
+        this.photoUrl = article.getPhotoUrl();
+        this.content = article.getContent();
+        this.createdBy = article.getCreatedBy();
+        this.createdOn = article.getCreatedOn();
+        this.updatedOn = article.getUpdatedOn();
+    }
 
     public Long getId() {
         return id;

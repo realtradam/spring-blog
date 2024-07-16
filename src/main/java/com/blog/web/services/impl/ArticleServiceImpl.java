@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.blog.web.mappers.ArticleMapper;
 import static com.blog.web.mappers.ArticleMapper.mapToArticle;
 import static com.blog.web.mappers.ArticleMapper.mapToArticleDto;
 
@@ -29,7 +30,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public List<ArticleDto> findAllArticles() {
         List<Article> articles = articleRepository.findAll();
-        return articles.stream().map((article) -> mapToArticleDto(article)).collect(Collectors.toList());
+        //return articles.stream().map((article) -> mapToArticleDto(article)).collect(Collectors.toList());
+        return articles.stream().map(ArticleMapper::mapToArticleDto).collect(Collectors.toList());
     }
 
     @Override

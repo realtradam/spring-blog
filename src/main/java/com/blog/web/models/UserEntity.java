@@ -1,9 +1,12 @@
 package com.blog.web.models;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity(name = "users")
 // Named UserEntity to prevent conflicts with Java User object
@@ -25,6 +28,15 @@ public class UserEntity {
     public boolean equals(UserEntity user)
     {
         return this.id == user.getId();
+    }
+
+    public User toSecurityUser() {
+        return new User(
+                this.getEmail(),
+                this.getPassword(),
+                this.getRoles().stream().map((role) -> new SimpleGrantedAuthority(role.getName()))
+                        .collect(Collectors.toList())
+        );
     }
 
     public Long getId() {

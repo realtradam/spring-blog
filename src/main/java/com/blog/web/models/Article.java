@@ -1,5 +1,6 @@
 package com.blog.web.models;
 
+import com.blog.web.dto.ArticleDto;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -41,6 +42,16 @@ public class Article {
     }
 
     public Article() {};
+
+    public Article(ArticleDto articleDto) {
+        this.id = articleDto.getId();
+        this.title = articleDto.getTitle();
+        this.photoUrl = articleDto.getPhotoUrl();
+        this.content = articleDto.getContent();
+        this.createdBy = articleDto.getCreatedBy();
+        this.createdOn = articleDto.getCreatedOn();
+        this.updatedOn = articleDto.getUpdatedOn();
+    }
 
     public Long getId() {
         return id;
