@@ -1,5 +1,6 @@
 package com.blog.web.dto;
 
+import com.blog.web.models.UserEntity;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 
@@ -11,6 +12,18 @@ public class RegistrationDto {
     private String email;
     @NotEmpty
     private String password;
+
+    public RegistrationDto() {};
+
+    public RegistrationDto(
+            String username,
+            String email,
+            String password
+    ) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
 
     public Long getId() {
         return id;
