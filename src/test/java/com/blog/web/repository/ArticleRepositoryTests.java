@@ -7,21 +7,13 @@ import com.blog.web.models.Article;
 import com.blog.web.models.UserEntity;
 import com.blog.web.services.ArticleService;
 import com.blog.web.services.UserService;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -48,7 +40,7 @@ public class ArticleRepositoryTests {
                 "blah"
         );
         userService.saveUser(userDto);
-        UserEntity user = userService.findByUsername("test");
+        UserEntity user = userService.findByUsername("test").orElseThrow();
         final ArticleDto articleDto1 = new ArticleDto(
                 1,
                 "Title",

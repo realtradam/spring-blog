@@ -18,25 +18,15 @@ public class UserEntity {
     private String email;
     private String password;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "user_roles",
-            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},
-            inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")}
-    )
-    private List<Role> roles = new ArrayList<>();
+    @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
+    private final List<Role> roles = new ArrayList<>();
 
-    public boolean equals(UserEntity user)
-    {
+    public boolean equals(UserEntity user) {
         return this.id == user.getId();
     }
 
     public User toSecurityUser() {
-        return new User(
-                this.getEmail(),
-                this.getPassword(),
-                this.getRoles().stream().map((role) -> new SimpleGrantedAuthority(role.getName()))
-                        .collect(Collectors.toList())
-        );
+        return new User(this.getEmail(), this.getPassword(), this.getRoles().stream().map((role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
     }
 
     public Long getId() {
@@ -76,6 +66,7 @@ public class UserEntity {
     }
 
     public void setRoles(List<Role> roles) {
-        this.roles = roles;
+        this.roles.clear();
+        this.roles.addAll(roles);
     }
 }

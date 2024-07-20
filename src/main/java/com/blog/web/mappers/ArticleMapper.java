@@ -4,6 +4,9 @@ import com.blog.web.dto.ArticleDto;
 import com.blog.web.models.Article;
 
 public class ArticleMapper {
+    private ArticleMapper() {
+    }
+
     public static Article mapToArticle(ArticleDto articleDto) {
         return new Article(articleDto);
     }

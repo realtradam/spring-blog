@@ -1,7 +1,5 @@
 package com.blog.web.dto;
 
-import com.blog.web.models.UserEntity;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 
 public class RegistrationDto {
@@ -10,16 +8,14 @@ public class RegistrationDto {
     private String username;
     @NotEmpty
     private String email;
+
     @NotEmpty
     private String password;
 
-    public RegistrationDto() {};
+    public RegistrationDto() {
+    }
 
-    public RegistrationDto(
-            String username,
-            String email,
-            String password
-    ) {
+    public RegistrationDto(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
@@ -49,11 +45,11 @@ public class RegistrationDto {
         this.email = email;
     }
 
-    public @NotEmpty String getPassword() {
-        return password;
-    }
-
     public void setPassword(@NotEmpty String password) {
         this.password = password;
+    }
+
+    public @NotEmpty String getPassword() {
+        return password;
     }
 }

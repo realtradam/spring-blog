@@ -29,15 +29,7 @@ public class ArticleDto {
     @JoinColumn(name = "created_by", nullable = false)
     private UserEntity createdBy;
 
-    public ArticleDto(
-            long id,
-            String title,
-            String photoUrl,
-            String content,
-            UserEntity createdBy,
-            LocalDateTime createdOn,
-            LocalDateTime updatedOn
-    ) {
+    public ArticleDto(long id, String title, String photoUrl, String content, UserEntity createdBy, LocalDateTime createdOn, LocalDateTime updatedOn) {
         this.id = id;
         this.title = title;
         this.photoUrl = photoUrl;
@@ -47,7 +39,10 @@ public class ArticleDto {
         this.updatedOn = updatedOn;
     }
 
-    public ArticleDto() {};
+    public ArticleDto() {
+    }
+
+    ;
 
     public ArticleDto(Article article) {
         this.id = article.getId();
@@ -114,4 +109,6 @@ public class ArticleDto {
     public void setCreatedBy(UserEntity createdBy) {
         this.createdBy = createdBy;
     }
+
+    public String getUsername() { return createdBy.getUsername(); }
 }

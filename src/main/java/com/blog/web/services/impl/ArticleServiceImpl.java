@@ -7,12 +7,15 @@ import com.blog.web.repository.ArticleRepository;
 import com.blog.web.repository.UserRepository;
 import com.blog.web.security.SecurityUtil;
 import com.blog.web.services.ArticleService;
+import com.blog.web.services.UserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.blog.web.mappers.ArticleMapper;
+
 import static com.blog.web.mappers.ArticleMapper.mapToArticle;
 import static com.blog.web.mappers.ArticleMapper.mapToArticleDto;
 
@@ -20,27 +23,31 @@ import static com.blog.web.mappers.ArticleMapper.mapToArticleDto;
 public class ArticleServiceImpl implements ArticleService {
     final private ArticleRepository articleRepository;
     final private UserRepository userRepository;
+    final private UserService userService;
 
-    public ArticleServiceImpl(ArticleRepository articleRepository, UserRepository userRepository) {
+    public ArticleServiceImpl(ArticleRepository articleRepository, UserRepository userRepository, UserService userService) {
         this.userRepository = userRepository;
         this.articleRepository = articleRepository;
+        this.userService = userService;
     }
 
 
     @Override
     public List<ArticleDto> findAllArticles() {
         List<Article> articles = articleRepository.findAll();
-        //return articles.stream().map((article) -> mapToArticleDto(article)).collect(Collectors.toList());
         return articles.stream().map(ArticleMapper::mapToArticleDto).collect(Collectors.toList());
     }
 
     @Override
-    public Article saveArticle(ArticleDto articleDto) {
+    public Optional<Article> saveArticle(ArticleDto articleDto) {
         String username = SecurityUtil.getSessionUser();
-        UserEntity user = userRepository.findByUsername(username);
+        UserEntity user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) {
+            return null;
+        }
         Article article = mapToArticle(articleDto);
         article.setCreatedBy(user);
-        return articleRepository.save(article);
+        return Optional.of(articleRepository.save(article));
     }
 
     @Override
@@ -52,15 +59,30 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void updateArticle(ArticleDto articleDto) {
         String username = SecurityUtil.getSessionUser();
-        UserEntity user = userRepository.findByUsername(username);
+        UserEntity user = userRepository.findByUsername(username).orElse(null);
+        if (user == null) {
+            return;
+        }
         Article article = mapToArticle(articleDto);
         article.setCreatedBy(user);
         articleRepository.save(article);
     }
 
     @Override
-    public void delete(Long articleId) {
-        articleRepository.deleteById(articleId);
+    public boolean delete(Long articleId) {
+        final UserEntity user = userService.getLoggedInUser().orElse(null);
+        if (user == null) {
+            return false;
+        }
+        String userId = user.getUsername();
+        ArticleDto article = this.findArticleById(articleId);
+        String ownerId = article.getUsername();
+        if (ownerId.equals(userId)) {
+            articleRepository.deleteById(articleId);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

@@ -3,7 +3,6 @@ package com.blog.web.controllers;
 import com.blog.web.dto.ArticleDto;
 import com.blog.web.models.Article;
 import com.blog.web.models.UserEntity;
-import com.blog.web.security.SecurityUtil;
 import com.blog.web.services.ArticleService;
 import com.blog.web.services.UserService;
 import jakarta.validation.Valid;
@@ -27,7 +26,7 @@ public class ArticleController {
     @GetMapping("/articles")
     public String listArticles(Model model) {
         List<ArticleDto> articles = articleService.findAllArticles();
-        UserEntity user = userService.getLoggedInUser();
+        UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
         model.addAttribute("user", user);
         model.addAttribute("articles", articles);
         return "index";
@@ -37,67 +36,54 @@ public class ArticleController {
     public String showArticle(@PathVariable("articleId") long articleId, Model model) {
         ArticleDto articleDto = articleService.findArticleById(articleId);
         model.addAttribute("article", articleDto);
-        UserEntity user = userService.getLoggedInUser();
+        UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
         model.addAttribute("user", user);
         return "articles/show";
     }
 
     @GetMapping("/articles/new")
     public String createArticleForm(Model model) {
-        UserEntity user = userService.getLoggedInUser();
-        model.addAttribute("user", user);
-        final Article article = new Article();
-        model.addAttribute("article", article);
+        model.addAttribute("user", userService.getLoggedInUser().orElse(new UserEntity()));
+        model.addAttribute("article", new Article());
         return "articles/new";
     }
 
     @PostMapping("/articles/new")
-    public String saveArticle(@Valid @ModelAttribute("article") ArticleDto articleDto,
-                              BindingResult result,
-                              Model model)
-    {
-        // if un-logged in user tries to create an article
+    public String saveArticle(@Valid @ModelAttribute("article") ArticleDto articleDto, BindingResult result, Model model) {
+        // if non-authenticated in user tries to create an article
         // redirect them to login page
-        UserEntity user = userService.getLoggedInUser();
-        if(userService.getLoggedInUser().getId() == null) {
+        UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
+        if (user.getId() == null) {
             return "redirect:/userlogin";
-        }
-        else if(result.hasErrors()) {
+        } else if (result.hasErrors()) {
             model.addAttribute("article", articleDto);
             return "articles/new";
-        }
-        else {
+        } else {
             articleService.saveArticle(articleDto);
             return "redirect:/articles";
         }
     }
 
-
     @GetMapping("/articles/delete/{articleId}")
     public String deleteArticle(@PathVariable("articleId") Long articleId) {
-        UserEntity user = userService.getLoggedInUser();
-        ArticleDto article = articleService.findArticleById(articleId);
-        UserEntity owner = article.getCreatedBy();
-        if(owner.equals(user)) {
-            articleService.delete(articleId);
-        }
+        articleService.delete(articleId);
         return "redirect:/articles";
     }
 
     @GetMapping("/articles/edit/{articleId}")
     public String editArticleForm(@PathVariable("articleId") long articleId, Model model) {
-        UserEntity user = userService.getLoggedInUser();
-        model.addAttribute("user", user);
-        ArticleDto articleDto = articleService.findArticleById(articleId);
-        model.addAttribute("article", articleDto);
+        UserEntity user = userService.getLoggedInUser().orElse(null);
+        if (user != null) {
+            model.addAttribute("user", user);
+            ArticleDto articleDto = articleService.findArticleById(articleId);
+            model.addAttribute("article", articleDto);
+        }
         return "articles/edit";
     }
 
     @PostMapping("/articles/edit/{articleId}")
-    public String updateArticle(@PathVariable("articleId") Long articleId,
-                                @Valid @ModelAttribute("article") ArticleDto article,
-                                BindingResult result) {
-        if(result.hasErrors()) {
+    public String updateArticle(@PathVariable("articleId") Long articleId, @Valid @ModelAttribute("article") ArticleDto article, BindingResult result) {
+        if (result.hasErrors()) {
             return "articles/edit";
         }
         article.setId(articleId);
@@ -107,13 +93,12 @@ public class ArticleController {
 
     @GetMapping("/articles/search")
     public String searchArticle(@RequestParam(value = "search") String search, Model model) {
-        UserEntity user = userService.getLoggedInUser();
+        UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
         model.addAttribute("user", user);
         List<ArticleDto> articles = articleService.searchArticles(search);
         model.addAttribute("articles", articles);
         return "index";
     }
-
 
     @GetMapping("/")
     public String getArticles() {

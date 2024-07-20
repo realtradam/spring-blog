@@ -21,6 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
@@ -63,13 +64,13 @@ public class ArticleServiceTests {
                 LocalDateTime.now()
         );
 
-        when(userRepository.findByUsername(anyString())).thenReturn(user);
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
         when(articleRepository.save(any(Article.class))).then(returnsFirstArg());
         //when(SecurityUtil.getSessionUser()).thenReturn(user.getUsername());
         try(MockedStatic<SecurityUtil> utilities = Mockito.mockStatic(SecurityUtil.class)) {
             utilities.when(SecurityUtil::getSessionUser).thenReturn(user.getUsername());
             Assertions.assertEquals(user.getUsername(), SecurityUtil.getSessionUser());
-            Article article = articleService.saveArticle(articleDto);
+            Article article = articleService.saveArticle(articleDto).orElse(null);
 
             Assertions.assertNotNull(article);
         }
