@@ -1,6 +1,7 @@
 package com.blog.web.controllers;
 
 import com.blog.web.dto.ArticleDto;
+import com.blog.web.dto.ArticlePublicDto;
 import com.blog.web.models.Article;
 import com.blog.web.models.UserEntity;
 import com.blog.web.services.ArticleService;
@@ -11,8 +12,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
 
+@RestController
 @Controller
 public class ArticleController {
     private ArticleService articleService;
@@ -23,13 +27,27 @@ public class ArticleController {
         this.userService = userService;
     }
 
+    @GetMapping("/get")
+    public Article getMethod() {
+        return new Article(
+                5,
+                "blah",
+                "blah",
+                "blah",
+                new UserEntity(),
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+    }
+
     @GetMapping("/articles")
-    public String listArticles(Model model) {
-        List<ArticleDto> articles = articleService.findAllArticles();
-        UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
-        model.addAttribute("user", user);
-        model.addAttribute("articles", articles);
-        return "index";
+    public HashSet<ArticlePublicDto> listArticles(Model model) {
+        HashSet<ArticlePublicDto> articles = new HashSet<ArticlePublicDto>(articleService.findAllArticles());
+        //UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
+        //model.addAttribute("user", user);
+        //model.addAttribute("articles", articles);
+        //return "index";
+        return articles;
     }
 
     @GetMapping("/articles/{articleId}")
@@ -52,8 +70,8 @@ public class ArticleController {
     public String saveArticle(@Valid @ModelAttribute("article") ArticleDto articleDto, BindingResult result, Model model) {
         // if non-authenticated in user tries to create an article
         // redirect them to login page
-        UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
-        if (user.getId() == null) {
+        UserEntity user = userService.getLoggedInUser().orElse(null);
+        if (user == null) {
             return "redirect:/userlogin";
         } else if (result.hasErrors()) {
             model.addAttribute("article", articleDto);

@@ -1,13 +1,14 @@
 package com.blog.web.services;
 
 import com.blog.web.dto.ArticleDto;
+import com.blog.web.dto.ArticlePublicDto;
 import com.blog.web.models.Article;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ArticleService {
-    List<ArticleDto> findAllArticles();
+    List<ArticlePublicDto> findAllArticles();
 
     Optional<Article> saveArticle(ArticleDto article);
 

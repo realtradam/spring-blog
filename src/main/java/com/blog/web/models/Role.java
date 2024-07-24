@@ -9,12 +9,12 @@ import java.util.List;
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private String name;
     @ManyToMany(mappedBy = "roles")
     private List<UserEntity> users = new ArrayList<>();
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 

@@ -1,6 +1,7 @@
 package com.blog.web.mappers;
 
 import com.blog.web.dto.ArticleDto;
+import com.blog.web.dto.ArticlePublicDto;
 import com.blog.web.models.Article;
 
 public class ArticleMapper {
@@ -13,5 +14,9 @@ public class ArticleMapper {
 
     public static ArticleDto mapToArticleDto(Article article) {
         return new ArticleDto(article);
+    }
+
+    public static ArticlePublicDto mapToArticlePublicDto(Article article) {
+        return new ArticlePublicDto(article);
     }
 }

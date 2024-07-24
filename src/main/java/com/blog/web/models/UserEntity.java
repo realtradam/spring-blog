@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private String username;
     private String email;
     private String password;
@@ -29,11 +29,11 @@ public class UserEntity {
         return new User(this.getEmail(), this.getPassword(), this.getRoles().stream().map((role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 

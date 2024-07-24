@@ -1,6 +1,7 @@
 package com.blog.web.services.impl;
 
 import com.blog.web.dto.ArticleDto;
+import com.blog.web.dto.ArticlePublicDto;
 import com.blog.web.models.Article;
 import com.blog.web.models.UserEntity;
 import com.blog.web.repository.ArticleRepository;
@@ -33,9 +34,9 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     @Override
-    public List<ArticleDto> findAllArticles() {
+    public List<ArticlePublicDto> findAllArticles() {
         List<Article> articles = articleRepository.findAll();
-        return articles.stream().map(ArticleMapper::mapToArticleDto).collect(Collectors.toList());
+        return articles.stream().map(ArticleMapper::mapToArticlePublicDto).collect(Collectors.toList());
     }
 
     @Override
