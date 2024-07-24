@@ -40,6 +40,7 @@ public class ArticleController {
         );
     }
 
+    @CrossOrigin
     @GetMapping("/articles")
     public HashSet<ArticlePublicDto> listArticles(Model model) {
         HashSet<ArticlePublicDto> articles = new HashSet<ArticlePublicDto>(articleService.findAllArticles());
