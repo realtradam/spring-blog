@@ -11,14 +11,14 @@ import com.blog.web.services.ArticleService;
 import com.blog.web.services.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.blog.web.mappers.ArticleMapper;
 
-import static com.blog.web.mappers.ArticleMapper.mapToArticle;
-import static com.blog.web.mappers.ArticleMapper.mapToArticleDto;
+import static com.blog.web.mappers.ArticleMapper.*;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
@@ -86,9 +86,20 @@ public class ArticleServiceImpl implements ArticleService {
         }
     }
 
+    //@Override
+    //public List<ArticleDto> searchArticles(String search) {
+    //    List<Article> articles = articleRepository.searchArticles(search);
+    //    return articles.stream().map(article -> mapToArticleDto(article)).collect(Collectors.toList());
+    //}
+
     @Override
-    public List<ArticleDto> searchArticles(String search) {
-        List<Article> articles = articleRepository.searchArticles(search);
-        return articles.stream().map(article -> mapToArticleDto(article)).collect(Collectors.toList());
+    public ArticlePublicDto findArticlePublicById(long articleId) {
+        return new ArticlePublicDto(articleRepository.findById(articleId).get());
+    }
+
+    @Override
+    public HashSet<ArticlePublicDto> searchPublicArticles(String search) {
+        HashSet<Article> articles = articleRepository.searchArticles(search);
+        return articles.stream().map(article -> mapToArticlePublicDto(article)).collect(Collectors.toCollection(HashSet::new));
     }
 }

@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 
+@RequestMapping("/api/v1")
 @RestController
 @Controller
 public class ArticleController {
@@ -51,21 +52,23 @@ public class ArticleController {
         return articles;
     }
 
-    @GetMapping("/articles/{articleId}")
-    public String showArticle(@PathVariable("articleId") long articleId, Model model) {
-        ArticleDto articleDto = articleService.findArticleById(articleId);
-        model.addAttribute("article", articleDto);
-        UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
-        model.addAttribute("user", user);
-        return "articles/show";
+    @CrossOrigin
+    @GetMapping("/article/{articleId}")
+    public ArticlePublicDto showArticle(@PathVariable("articleId") long articleId, Model model) {
+        ArticlePublicDto articlePublicDto = articleService.findArticlePublicById(articleId);
+        //model.addAttribute("article", articlePublicDto);
+        //UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
+        //model.addAttribute("user", user);
+        //return "articles/show";
+        return articlePublicDto;
     }
 
-    @GetMapping("/articles/new")
+    /*@GetMapping("/articles/new")
     public String createArticleForm(Model model) {
         model.addAttribute("user", userService.getLoggedInUser().orElse(new UserEntity()));
         model.addAttribute("article", new Article());
         return "articles/new";
-    }
+    }*/
 
     @PostMapping("/articles/new")
     public String saveArticle(@Valid @ModelAttribute("article") ArticleDto articleDto, BindingResult result, Model model) {
@@ -112,10 +115,10 @@ public class ArticleController {
 
     @GetMapping("/articles/search")
     public String searchArticle(@RequestParam(value = "search") String search, Model model) {
-        UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
-        model.addAttribute("user", user);
-        List<ArticleDto> articles = articleService.searchArticles(search);
-        model.addAttribute("articles", articles);
+        //UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
+        //model.addAttribute("user", user);
+        HashSet<ArticlePublicDto> articles = articleService.searchPublicArticles(search);
+        //model.addAttribute("articles", articles);
         return "index";
     }
 
