@@ -16,9 +16,9 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 
-@RequestMapping("/api/v1")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
-@Controller
+@RequestMapping("/api/v1")
 public class ArticleController {
     private ArticleService articleService;
     private UserService userService;
@@ -41,7 +41,6 @@ public class ArticleController {
         );
     }
 
-    @CrossOrigin
     @GetMapping("/articles")
     public HashSet<ArticlePublicDto> listArticles(Model model) {
         HashSet<ArticlePublicDto> articles = new HashSet<ArticlePublicDto>(articleService.findAllArticles());
@@ -52,7 +51,6 @@ public class ArticleController {
         return articles;
     }
 
-    @CrossOrigin
     @GetMapping("/article/{articleId}")
     public ArticlePublicDto showArticle(@PathVariable("articleId") long articleId, Model model) {
         ArticlePublicDto articlePublicDto = articleService.findArticlePublicById(articleId);

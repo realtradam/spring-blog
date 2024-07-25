@@ -5,14 +5,13 @@ import com.blog.web.models.UserEntity;
 import com.blog.web.services.UserService;
 import jakarta.validation.Valid;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@RestController
+@RequestMapping("/api/v1")
 public class AuthController {
     private final UserService userService;
 
@@ -27,15 +26,18 @@ public class AuthController {
         return "auth/login";
     }
 
+    /*
     @GetMapping("/register")
     public String getRegisterForm(Model model) {
         final RegistrationDto user = new RegistrationDto();
         model.addAttribute("user", user);
         return "auth/register";
     }
+    */
 
-    @PostMapping("/register/save")
-    public String register(@Valid @ModelAttribute("user") RegistrationDto user, BindingResult result, Model model) {
+    //@PostMapping("/register/save")
+    @PostMapping("/register")
+    public RegistrationDto register(@Valid @ModelAttribute("user") RegistrationDto user, BindingResult result) {
         UserEntity existingUserEmail = userService.findByEmail(user.getEmail()).orElse(null);
         if (existingUserEmail != null && StringUtils.isBlank(existingUserEmail.getEmail())) {
             result.rejectValue("email", "There is already a user with this email");
@@ -47,10 +49,12 @@ public class AuthController {
         }
 
         if (result.hasErrors()) {
-            model.addAttribute("user", user);
-            return "register";
+            //model.addAttribute("user", user);
+            //return "register";
+            return user;
         }
         userService.saveUser(user);
-        return "redirect:/articles?success";
+        //return "redirect:/articles?success";
+        return user;
     }
 }
