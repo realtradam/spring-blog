@@ -3,6 +3,7 @@ import Home from "../pages/Home";
 import Layout from "../components/Layout";
 import Article from "../pages/Article";
 import Register from "../pages/Register";
+import Login from "../pages/Login";
 
 export default function Index()
 {
@@ -13,6 +14,7 @@ export default function Index()
 							<Route index element={<Home />} />
 							<Route path="/article/:id" element={<Article />} />
 							<Route path="register" element={<Register />} />
+							<Route path="login" element={<Login />} />
 						</Route>
 					</Routes>
 				</Router>

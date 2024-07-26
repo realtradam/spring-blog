@@ -28,7 +28,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // disabling csrf leaves us vulnerable, in a real production app do not do this
-        http.csrf(c -> c.disable()).cors(c -> c.disable()).authorizeHttpRequests(auths -> auths.anyRequest().permitAll()).formLogin(form -> form.loginPage("/userlogin").usernameParameter("username").passwordParameter("password").defaultSuccessUrl("/articles").loginProcessingUrl("/userlogin").failureUrl("/userlogin?error=true").permitAll()).logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/articles"));
+        http.csrf(c -> c.disable()).cors(c -> c.disable()).authorizeHttpRequests(auths -> auths.anyRequest().permitAll()).formLogin(form -> form.loginPage("/login").usernameParameter("username").passwordParameter("password").defaultSuccessUrl("/").loginProcessingUrl("/userlogin").failureUrl("/userlogin?error=true").permitAll()).logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/articles"));
         return http.build();
     }
 

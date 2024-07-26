@@ -19,22 +19,6 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @GetMapping("/userlogin")
-    public String login(Model model) {
-        final UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
-        model.addAttribute("user", user);
-        return "auth/login";
-    }
-
-    /*
-    @GetMapping("/register")
-    public String getRegisterForm(Model model) {
-        final RegistrationDto user = new RegistrationDto();
-        model.addAttribute("user", user);
-        return "auth/register";
-    }
-    */
-
     //@PostMapping("/register/save")
     @PostMapping("/register")
     public RegistrationDto register(@Valid @ModelAttribute("user") RegistrationDto user, BindingResult result) {
@@ -48,13 +32,9 @@ public class AuthController {
             result.rejectValue("username", "There is already a user with this username");
         }
 
-        if (result.hasErrors()) {
-            //model.addAttribute("user", user);
-            //return "register";
-            return user;
+        if (!result.hasErrors()) {
+            userService.saveUser(user);
         }
-        userService.saveUser(user);
-        //return "redirect:/articles?success";
         return user;
     }
 }
