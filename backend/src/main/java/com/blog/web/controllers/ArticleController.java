@@ -18,8 +18,8 @@ import java.util.HashSet;
 @RestController
 @RequestMapping("/api/v1")
 public class ArticleController {
-    private ArticleService articleService;
-    private UserService userService;
+    private final ArticleService articleService;
+    private final UserService userService;
 
     public ArticleController(ArticleService articleService, UserService userService) {
         this.articleService = articleService;
@@ -42,10 +42,9 @@ public class ArticleController {
     @GetMapping("/articles")
     public HashSet<ArticlePublicDto> listArticles(@RequestParam(value = "search", required = false) String search) {
         HashSet<ArticlePublicDto> articles;
-        if(search != null) {
+        if (search != null) {
             articles = articleService.searchPublicArticles(search);
-        }
-        else {
+        } else {
             articles = new HashSet<ArticlePublicDto>(articleService.findAllArticles());
         }
         return articles;

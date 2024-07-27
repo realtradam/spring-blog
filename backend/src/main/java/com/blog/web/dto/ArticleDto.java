@@ -42,8 +42,6 @@ public class ArticleDto {
     public ArticleDto() {
     }
 
-    ;
-
     public ArticleDto(Article article) {
         this.id = article.getId();
         this.title = article.getTitle();

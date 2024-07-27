@@ -2,6 +2,7 @@ package com.blog.web.services.impl;
 
 import com.blog.web.dto.ArticleDto;
 import com.blog.web.dto.ArticlePublicDto;
+import com.blog.web.mappers.ArticleMapper;
 import com.blog.web.models.Article;
 import com.blog.web.models.UserEntity;
 import com.blog.web.repository.ArticleRepository;
@@ -15,8 +16,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import com.blog.web.mappers.ArticleMapper;
 
 import static com.blog.web.mappers.ArticleMapper.*;
 

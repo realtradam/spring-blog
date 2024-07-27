@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -33,7 +34,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
 
         final Role role = roleRepository.findByName("User").orElse(new Role());
-        user.setRoles(Arrays.asList(role));
+        user.setRoles(List.of(role));
         userRepository.save(user);
     }
 

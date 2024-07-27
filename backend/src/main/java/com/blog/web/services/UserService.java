@@ -12,5 +12,5 @@ public interface UserService {
 
     Optional<UserEntity> findByUsername(String username);
 
-    public Optional<UserEntity> getLoggedInUser();
+    Optional<UserEntity> getLoggedInUser();
 }

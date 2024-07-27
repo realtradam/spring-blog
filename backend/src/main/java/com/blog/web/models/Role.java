@@ -12,7 +12,7 @@ public class Role {
     private long id;
     private String name;
     @ManyToMany(mappedBy = "roles")
-    private List<UserEntity> users = new ArrayList<>();
+    private final List<UserEntity> users = new ArrayList<>();
 
     public long getId() {
         return id;
