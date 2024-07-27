@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FormEvent } from "react";
 
 type article = {
   id: number;
@@ -14,6 +14,7 @@ type articleSearch = {
   value: string | null;
 };
 
+
 export default function Home({
   articleSearch,
 }: {
@@ -21,6 +22,26 @@ export default function Home({
 }) {
   const [articles, setArticles] = useState<article[]>([]);
   const [allArticles, setAllArticles] = useState<JSX.Element[]>([]);
+
+  const handleDelete = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); //stops submit from happening
+
+    const target = e.target as typeof e.target & {
+      id: { value: string };
+    };
+
+    const response = await fetch(
+      `${import.meta.env.VITE_API_TITLE}/api/v1/article/delete/${target.id.value}`,
+      {
+        credentials: "include",
+        method: "get",
+      },
+    );
+    if (!response.ok) {
+      console.log(response);
+      alert("check console for error");
+    }
+  };
 
   // pull data when new search is given
   useEffect(() => {
@@ -71,9 +92,12 @@ export default function Home({
               Edit
             </a>
             {/*th:href="@{/articles/delete/{articleId}(articleId=${article.id})}"*/}
-            <a className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 ml-4 text-sm rounded">
+			<form onSubmit={handleDelete} method="post">
+			<input type="hidden" name="id" value={article.id}/>
+            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 ml-4 text-sm rounded">
               Delete
-            </a>
+            </button>
+			</form>
           </div>
           <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow-lg p-6">
             <div className="flex items-center justify-between">
