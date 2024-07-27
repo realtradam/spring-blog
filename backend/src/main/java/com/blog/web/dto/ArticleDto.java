@@ -110,5 +110,7 @@ public class ArticleDto {
         this.createdBy = createdBy;
     }
 
-    public String getUsername() { return createdBy.getUsername(); }
+    public String getUsername() {
+        return createdBy.getUsername();
+    }
 }

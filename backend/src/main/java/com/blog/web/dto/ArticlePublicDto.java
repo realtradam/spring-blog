@@ -50,7 +50,7 @@ public class ArticlePublicDto {
         return title;
     }
 
-    public void setTitle( String title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -66,7 +66,7 @@ public class ArticlePublicDto {
         return content;
     }
 
-    public void setContent( String content) {
+    public void setContent(String content) {
         this.content = content;
     }
 

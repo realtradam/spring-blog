@@ -1,8 +1,33 @@
 import { Outlet } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 
 export default function Layout()
 {
+	const [user, setUser] = useState<string | null>(null);
+
+	useEffect(() => {
+		const url = `${import.meta.env.VITE_API_TITLE}/api/v1/profile`;
+		fetch(url, {
+			credentials: 'include',
+			method: 'get',
+		}).then((response) => {
+			if (response.ok) {
+				return response.json();
+			}
+			throw new Error("Network response was not ok.");
+		}).then((response) => { setUser(response.username); console.log(response.username) });
+	}, [user]);
+
+	const logout = () => {
+		fetch(`${import.meta.env.VITE_API_TITLE}/api/v1/logout`, {
+			credentials: 'include',
+			method: 'get',
+		}).then(() => {
+			setUser(null);
+		});
+	}
+
 	return(
 		<>
 <div className="w-full bg-gray-200 min-h-screen font-sans leading-normal tracking-normal">
@@ -11,14 +36,7 @@ export default function Layout()
     <div className="container mx-auto flex items-center">
         <div className="flex text-white font-extrabold">
 {/*th:if="${(user == null || user.username == null)}"*/}
-            <a  className="flex text-white text-base no-underline hover:text-white hover:no-underline" href="#">
-                ☕<span className="hidden w-0 md:w-auto md:block pl-1">Spring!</span>
-            </a>
-{/*th:if="${!(user == null || user.username == null)}"*/}
-            <a  className="flex text-white text-base no-underline hover:text-white hover:no-underline" href="#">
-{/*th:text="'Logged in as: ' + ${user.username}"*/}
-                ☕<span  className="hidden w-0 md:w-auto md:block pl-1"></span>
-            </a>
+<a className="flex text-white text-base no-underline whitespace-nowrap hover:text-white hover:no-underline" href="#">☕ { user === null ? "Spring!" : user }<span  className="hidden w-0 md:w-auto md:block pl-1"></span></a>
         </div>
         <div className="flex pl-4 text-sm place-content-between w-full">
             <ul className="list-reset flex justify-between flex-1 md:flex-none items-center">
@@ -26,16 +44,14 @@ export default function Layout()
                     <a className="inline-block py-2 px-2 text-white no-underline" href="/">HOME</a>
                 </li>
                 <li className="mr-2">
-                    <a className="inline-block text-indigo-200 no-underline hover:text-gray-100 hover:text-underline py-2 px-2" href="/articles/new">NEW</a>
+                    <a className="inline-block text-indigo-200 no-underline hover:text-gray-100 hover:text-underline py-2 px-2" href="/article/new">NEW</a>
                 </li>
                 <li className="mr-2">
                     <a className="inline-block text-indigo-200 no-underline hover:text-indigo-100 hover:text-underline py-2 px-2" href="/register">REGISTER</a>
                 </li>
-                <li className="mr-2">
-{/*th:if="${(user == null || user.username == null)}"*/}
-                    <a  className="inline-block text-indigo-200 no-underline hover:text-indigo-100 hover:text-underline py-2 px-2" href="/userlogin">LOGIN</a>
-{/*th:if="${!(user == null || user.username == null)}"*/}
-                    <a  className="inline-block text-indigo-200 no-underline hover:text-indigo-100 hover:text-underline py-2 px-2" href="/logout">LOGOUT</a>
+                <li className="mr-2">{ user === null ? 
+                    <a  className="inline-block text-indigo-200 no-underline hover:text-indigo-100 hover:text-underline py-2 px-2" href="/login">LOGIN</a> :
+                    <button className="inline-block text-indigo-200 no-underline hover:text-indigo-100 hover:text-underline py-2 px-2" onClick={logout} >LOGOUT</button> }
                 </li>
             </ul>
 			{/*th:action="@{/articles/search}"*/}

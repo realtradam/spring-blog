@@ -1,20 +1,29 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import Home from "../pages/Home";
 import Layout from "../components/Layout";
-import Article from "../pages/Article";
-import Register from "../pages/Register";
-import Login from "../pages/Login";
+import Article from "../pages/articles/Article";
+import NewArticle from "../pages/articles/New";
+import Register from "../pages/auth/Register";
+import Login from "../pages/auth/Login";
+
+type user = { set: React.Dispatch<React.SetStateAction<string | null>>, value: string | null };
 
 export default function Index()
 {
+	const [user, setUser] = useState<string | null>(null);
+
+	const userProp: user = { set: setUser, value: user };
+
 	return (<>
 				<Router>
 					<Routes>
-						<Route path="/" element = {<Layout/>}>
+						<Route path="/" element = {<Layout />}>
 							<Route index element={<Home />} />
 							<Route path="/article/:id" element={<Article />} />
+							<Route path="/article/new" element={<NewArticle />} />
 							<Route path="register" element={<Register />} />
-							<Route path="login" element={<Login />} />
+							<Route path="login" element={<Login user={userProp}/>} />
 						</Route>
 					</Routes>
 				</Router>

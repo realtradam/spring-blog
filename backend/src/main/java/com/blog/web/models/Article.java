@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String title;
     private String photoUrl;
     private String content;
@@ -23,7 +23,7 @@ public class Article {
     @JoinColumn(name = "created_by", nullable = false)
     private UserEntity createdBy;
 
-    public Article(long id, String title, String photoUrl, String content, UserEntity createdBy, LocalDateTime createdOn, LocalDateTime updatedOn) {
+    public Article(Long id, String title, String photoUrl, String content, UserEntity createdBy, LocalDateTime createdOn, LocalDateTime updatedOn) {
         this.id = id;
         this.title = title;
         this.photoUrl = photoUrl;

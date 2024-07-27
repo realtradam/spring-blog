@@ -1,7 +1,10 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 
-export default function Article () {
+//type setUser = { setUser: { func: React.Dispatch<React.SetStateAction<string | null>> } };
+type user = { set: React.Dispatch<React.SetStateAction<string | null>>, value: string | null };
+
+export default function Login ({user}: {user: user}) {
 	const navigate = useNavigate();
 
 const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -17,24 +20,39 @@ const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		formData.append('username', target.username.value);
 		formData.append('password', target.password.value);
 
-		const response = await fetch(`${import.meta.env.VITE_API_TITLE}/api/v1/register`, {
+		const response = await fetch(`${import.meta.env.VITE_API_TITLE}/api/v1/login`, {
 			credentials: 'include',
 			method: 'post',
 			body: formData,
+		}).then((res) => { 
+			if(res.ok) {
+				const url = `${import.meta.env.VITE_API_TITLE}/api/v1/profile`;
+				fetch(url, {
+					credentials: 'include',
+					method: 'get',
+				}).then((response) => {
+					if (response.ok) {
+						return response.json();
+					}
+					throw new Error("Network response was not ok.");
+				}).then((response) => {
+					user.set(response.username);
+					console.log("USER:");
+					console.log(user);
+					console.log(user.value);
+					console.log(response.username);
+					navigate("/");
+				});
+			}
+			else {
+				console.log(response);
+				alert("check console for error");
+			}
 		});
-		if(response.ok) {
-			navigate("/");
-		}
-		else {
-			alert("error");
-		}
 	};
 
 	return(
 		<>
-<div className="text-xl p-4 bg-black text-red-500">Invalid Username/Password</div>
-<div className="text-xl p-4 bg-black text-red-500">You have been logged out</div>
-
 <div className="flex h-full justify-center bg-white p-12">
     <form onSubmit={handleSubmit} method="post" className="w-full max-w-lg">
         <div className="flex flex-wrap -mx-3 mb-6">
