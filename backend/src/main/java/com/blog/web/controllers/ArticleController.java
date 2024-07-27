@@ -40,8 +40,14 @@ public class ArticleController {
     }
 
     @GetMapping("/articles")
-    public HashSet<ArticlePublicDto> listArticles() {
-        HashSet<ArticlePublicDto> articles = new HashSet<ArticlePublicDto>(articleService.findAllArticles());
+    public HashSet<ArticlePublicDto> listArticles(@RequestParam(value = "search", required = false) String search) {
+        HashSet<ArticlePublicDto> articles;
+        if(search != null) {
+            articles = articleService.searchPublicArticles(search);
+        }
+        else {
+            articles = new HashSet<ArticlePublicDto>(articleService.findAllArticles());
+        }
         return articles;
     }
 
@@ -101,15 +107,6 @@ public class ArticleController {
         article.setId(articleId);
         articleService.updateArticle(article);
         return "redirect:/articles";
-    }
-
-    @GetMapping("/articles/search")
-    public String searchArticle(@RequestParam(value = "search") String search, Model model) {
-        //UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
-        //model.addAttribute("user", user);
-        HashSet<ArticlePublicDto> articles = articleService.searchPublicArticles(search);
-        //model.addAttribute("articles", articles);
-        return "index";
     }
 
     @GetMapping("/")
