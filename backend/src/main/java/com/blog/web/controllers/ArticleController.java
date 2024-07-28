@@ -78,7 +78,7 @@ public class ArticleController {
     }
 
     @PostMapping("/articles/edit/{articleId}")
-    public String updateArticle(@PathVariable("articleId") Long articleId, @Valid @ModelAttribute("article") ArticleDto article, BindingResult result) {
+    public String updateArticle(@PathVariable("articleId") long articleId, @Valid @ModelAttribute("article") ArticleDto article, BindingResult result) {
         if (result.hasErrors()) {
             return "articles/edit";
         }

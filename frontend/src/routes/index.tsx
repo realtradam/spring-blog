@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import Layout from "../components/Layout";
 import Article from "../pages/articles/Article";
 import NewArticle from "../pages/articles/New";
+import EditArticle from "../pages/articles/Edit";
 import Register from "../pages/auth/Register";
 import Login from "../pages/auth/Login";
 
@@ -33,9 +34,18 @@ export default function Index() {
               <Layout user={userProp} articleSearch={articleSearchProp} />
             }
           >
-            <Route index element={<Home articleSearch={articleSearchProp} />} />
+            <Route
+              index
+              element={
+                <Home
+                  username={userProp.value}
+                  articleSearch={articleSearchProp}
+                />
+              }
+            />
             <Route path="/article/:id" element={<Article />} />
             <Route path="/article/new" element={<NewArticle />} />
+            <Route path="/article/edit/:id" element={<EditArticle />} />
             <Route path="register" element={<Register />} />
             <Route path="login" element={<Login user={userProp} />} />
           </Route>

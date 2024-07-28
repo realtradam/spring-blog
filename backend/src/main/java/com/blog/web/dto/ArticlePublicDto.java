@@ -13,7 +13,7 @@ public class ArticlePublicDto {
     private LocalDateTime updatedOn;
     private String createdBy;
 
-    public ArticlePublicDto(long id, String title, String photoUrl, String content, String createdBy, LocalDateTime createdOn, LocalDateTime updatedOn) {
+    public ArticlePublicDto(Long id, String title, String photoUrl, String content, String createdBy, LocalDateTime createdOn, LocalDateTime updatedOn) {
         this.id = id;
         this.title = title;
         this.photoUrl = photoUrl;

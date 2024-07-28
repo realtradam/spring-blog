@@ -5,6 +5,7 @@ type article = {
   title: string;
   photoUrl: string;
   content: string;
+  createdBy: string;
   createdOn: string;
   updateOn: string;
 };
@@ -14,11 +15,12 @@ type articleSearch = {
   value: string | null;
 };
 
-
 export default function Home({
   articleSearch,
+  username,
 }: {
   articleSearch: articleSearch;
+  username: string | null;
 }) {
   const [articles, setArticles] = useState<article[]>([]);
   const [allArticles, setAllArticles] = useState<JSX.Element[]>([]);
@@ -40,11 +42,29 @@ export default function Home({
     if (!response.ok) {
       console.log(response);
       alert("check console for error");
+    } else {
+      fetchArticles();
     }
-	else {
-		fetchArticles();
-	}
   };
+
+  function renderButtons(article: article) {
+    return (
+      <div>
+        <a
+          href={`/article/edit/${article.id}`}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 ml-4 text-sm rounded"
+        >
+          Edit
+        </a>
+        <form onSubmit={handleDelete} method="post">
+          <input type="hidden" name="id" value={article.id} />
+          <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 ml-4 text-sm rounded">
+            Delete
+          </button>
+        </form>
+      </div>
+    );
+  }
 
   const fetchArticles = useCallback(() => {
     let url;
@@ -68,7 +88,9 @@ export default function Home({
   }, [articleSearch.value]);
 
   // pull data when new search is given
-  useEffect(() => { fetchArticles(); } , [articleSearch.value, fetchArticles]);
+  useEffect(() => {
+    fetchArticles();
+  }, [articleSearch.value, fetchArticles]);
 
   // when new data is pulled update the articles shown
   useEffect(() => {
@@ -80,7 +102,10 @@ export default function Home({
         >
           <div className="flex-1 bg-white rounded-t rounded-b-none overflow-hidden shadow-lg">
             {/*th:href="@{/articles/{articleId}(articleId=${article.id})}"*/}
-            <a className="flex flex-wrap no-underline hover:no-underline">
+            <a
+              href={`/article/${article.id}`}
+              className="flex flex-wrap no-underline hover:bg-sky-200 border-b-2 hover:no-underline"
+            >
               <img
                 src={article.photoUrl}
                 className="h-full w-full rounded-t pb-6"
@@ -90,19 +115,7 @@ export default function Home({
               </div>
               <p className="text-gray-800 font-serif text-base px-6 mb-5"></p>
             </a>
-            {/*th:if="${user.id} == ${article.createdBy.id}"*/}
-            <div></div>
-            {/*th:href="@{/articles/edit/{articleId}(articleId=${article.id})}"*/}
-            <a className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 ml-4 text-sm rounded">
-              Edit
-            </a>
-            {/*th:href="@{/articles/delete/{articleId}(articleId=${article.id})}"*/}
-			<form onSubmit={handleDelete} method="post">
-			<input type="hidden" name="id" value={article.id}/>
-            <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 ml-4 text-sm rounded">
-              Delete
-            </button>
-			</form>
+            {username == article?.createdBy && renderButtons(article)}
           </div>
           <div className="flex-none mt-auto bg-white rounded-b rounded-t-none overflow-hidden shadow-lg p-6">
             <div className="flex items-center justify-between">
@@ -112,7 +125,7 @@ export default function Home({
         </div>
       )),
     );
-  }, [articles]);
+  }, [articles, username]);
 
   return (
     <>

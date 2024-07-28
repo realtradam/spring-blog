@@ -61,13 +61,21 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void updateArticle(ArticleDto articleDto) {
-        final String username = SecurityUtil.getSessionUser();
-        final UserEntity user = userRepository.findByUsername(username).orElse(null);
-        if (user == null) {
-            return;
-        }
-        final Article article = mapToArticle(articleDto);
+    public void updateArticle(ArticleDto newArticle) {
+        if(newArticle == null) { return; }
+        final Optional<ArticleDto> optExistingArticle = this.findArticleById(newArticle.getId());
+        if(optExistingArticle.isEmpty()) { return; } // cant find article, give up
+        final ArticleDto existingArticle = optExistingArticle.get();
+        Long ownerId = existingArticle.getUserId();
+
+        final Optional<UserEntity> optUser = userService.getLoggedInUser();
+        if (optUser.isEmpty()) { return; } // not logged in, not allowed to edit
+        final UserEntity user = optUser.get();
+        Long userId = user.getId();
+
+        if (!ownerId.equals(userId)) { return; } // logged in a different user, not allowed to edit
+
+        final Article article = mapToArticle(newArticle);
         article.setCreatedBy(user);
         articleRepository.save(article);
     }

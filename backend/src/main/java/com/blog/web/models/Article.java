@@ -46,7 +46,7 @@ public class Article {
         this.updatedOn = articleDto.getUpdatedOn();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
