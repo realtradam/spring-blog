@@ -12,7 +12,6 @@ import com.blog.web.services.ArticleService;
 import com.blog.web.services.UserService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -51,45 +50,46 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleDto findArticleById(long articleId) {
-        Article article = articleRepository.findById(articleId).get();
-        return mapToArticleDto(article);
+    public Optional<ArticleDto> findArticleById(long articleId) {
+        final Optional<Article> otpArticle = articleRepository.findById(articleId);
+        if(otpArticle.isEmpty()) {
+            return Optional.empty();
+        }
+        else {
+            return Optional.of(mapToArticleDto(otpArticle.get()));
+        }
     }
 
     @Override
     public void updateArticle(ArticleDto articleDto) {
-        String username = SecurityUtil.getSessionUser();
-        UserEntity user = userRepository.findByUsername(username).orElse(null);
+        final String username = SecurityUtil.getSessionUser();
+        final UserEntity user = userRepository.findByUsername(username).orElse(null);
         if (user == null) {
             return;
         }
-        Article article = mapToArticle(articleDto);
+        final Article article = mapToArticle(articleDto);
         article.setCreatedBy(user);
         articleRepository.save(article);
     }
 
     @Override
-    public boolean delete(Long articleId) {
-        final UserEntity user = userService.getLoggedInUser().orElse(null);
-        if (user == null) {
-            return false;
-        }
-        String userId = user.getUsername();
-        ArticleDto article = this.findArticleById(articleId);
+    public boolean delete(long articleId) {
+        final Optional<ArticleDto> optArticle = this.findArticleById(articleId);
+        if(optArticle.isEmpty()) { return false; } // cant find article, give up
+        final ArticleDto article = optArticle.get();
         String ownerId = article.getUsername();
-        if (ownerId.equals(userId)) {
+
+        final Optional<UserEntity> optUser = userService.getLoggedInUser();
+        if (optUser.isEmpty()) { return false; } // not logged in, not allowed to delete
+        final UserEntity user = optUser.get();
+        String userId = user.getUsername();
+
+        if (!ownerId.equals(userId)) { return false; } // logged in a different user, not allowed to delete
+        else {
             articleRepository.deleteById(articleId);
             return true;
-        } else {
-            return false;
         }
     }
-
-    //@Override
-    //public List<ArticleDto> searchArticles(String search) {
-    //    List<Article> articles = articleRepository.searchArticles(search);
-    //    return articles.stream().map(article -> mapToArticleDto(article)).collect(Collectors.toList());
-    //}
 
     @Override
     public ArticlePublicDto findArticlePublicById(long articleId) {
@@ -97,8 +97,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public HashSet<ArticlePublicDto> searchPublicArticles(String search) {
-        HashSet<Article> articles = articleRepository.searchArticles(search);
-        return articles.stream().map(article -> mapToArticlePublicDto(article)).collect(Collectors.toCollection(HashSet::new));
+    public List<ArticlePublicDto> searchPublicArticles(String search) {
+        List<Article> articles = articleRepository.searchArticles(search);
+        return articles.stream().map(article -> mapToArticlePublicDto(article)).collect(Collectors.toList());
     }
 }

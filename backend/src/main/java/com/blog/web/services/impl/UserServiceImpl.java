@@ -10,9 +10,7 @@ import com.blog.web.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,14 +26,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(RegistrationDto registrationDto) {
-        UserEntity user = new UserEntity();
-        user.setUsername(registrationDto.getUsername());
-        user.setEmail(registrationDto.getEmail());
-        user.setPassword(passwordEncoder.encode(registrationDto.getPassword()));
-
-        final Role role = roleRepository.findByName("User").orElse(new Role());
-        user.setRoles(List.of(role));
-        userRepository.save(user);
+        final HashSet<Role> roles = (HashSet<Role>) Set.of(roleRepository.findByName("User").orElse(new Role()));
+        userRepository.save(new UserEntity(registrationDto.getUsername(), registrationDto.getEmail(), passwordEncoder.encode(registrationDto.getPassword()), roles));
     }
 
     @Override
@@ -50,11 +42,11 @@ public class UserServiceImpl implements UserService {
 
     public Optional<UserEntity> getLoggedInUser() {
         final Optional<UserEntity> user;
-        String username = SecurityUtil.getSessionUser();
-        if (username != null) {
-            user = this.findByUsername(username);
+        Optional<String> optUsername = Optional.ofNullable(SecurityUtil.getSessionUser());
+        if(optUsername.isPresent()) {
+            user = this.findByUsername(optUsername.get());
         } else {
-            user = Optional.of(new UserEntity());
+            user = Optional.empty();
         }
         return user;
     }

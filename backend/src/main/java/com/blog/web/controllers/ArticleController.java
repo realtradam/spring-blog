@@ -12,7 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
 @RestController
@@ -40,12 +41,12 @@ public class ArticleController {
     }
 
     @GetMapping("/articles")
-    public HashSet<ArticlePublicDto> listArticles(@RequestParam(value = "search", required = false) String search) {
-        HashSet<ArticlePublicDto> articles;
-        if (search != null) {
-            articles = articleService.searchPublicArticles(search);
+    public List<ArticlePublicDto> listArticles(@RequestParam(value = "search", required = false) Optional<String> search) {
+        final List<ArticlePublicDto> articles;
+        if (search.isPresent()) {
+            articles = articleService.searchPublicArticles(search.get());
         } else {
-            articles = new HashSet<ArticlePublicDto>(articleService.findAllArticles());
+            articles = articleService.findAllArticles();
         }
         return articles;
     }
@@ -53,26 +54,15 @@ public class ArticleController {
     @GetMapping("/article/{articleId}")
     public ArticlePublicDto showArticle(@PathVariable("articleId") long articleId, Model model) {
         ArticlePublicDto articlePublicDto = articleService.findArticlePublicById(articleId);
-        //model.addAttribute("article", articlePublicDto);
-        //UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
-        //model.addAttribute("user", user);
-        //return "articles/show";
         return articlePublicDto;
     }
-
-    /*@GetMapping("/articles/new")
-    public String createArticleForm(Model model) {
-        model.addAttribute("user", userService.getLoggedInUser().orElse(new UserEntity()));
-        model.addAttribute("article", new Article());
-        return "articles/new";
-    }*/
 
     @PostMapping("/article/new")
     public String saveArticle(@Valid @ModelAttribute("article") ArticleDto articleDto, BindingResult result) {
         // if non-authenticated in user tries to create an article
         // redirect them to login page
-        UserEntity user = userService.getLoggedInUser().orElse(null);
-        if (user == null) {
+        Optional<UserEntity> user = userService.getLoggedInUser();
+        if (user.isEmpty()) {
             return "redirect:/login";
         } else if (!result.hasErrors()) {
             articleService.saveArticle(articleDto);
@@ -84,18 +74,7 @@ public class ArticleController {
     @GetMapping("/articles/delete/{articleId}")
     public String deleteArticle(@PathVariable("articleId") Long articleId) {
         articleService.delete(articleId);
-        return "redirect:/articles";
-    }
-
-    @GetMapping("/articles/edit/{articleId}")
-    public String editArticleForm(@PathVariable("articleId") long articleId, Model model) {
-        UserEntity user = userService.getLoggedInUser().orElse(null);
-        if (user != null) {
-            model.addAttribute("user", user);
-            ArticleDto articleDto = articleService.findArticleById(articleId);
-            model.addAttribute("article", articleDto);
-        }
-        return "articles/edit";
+        return "";
     }
 
     @PostMapping("/articles/edit/{articleId}")

@@ -40,7 +40,7 @@ public class AuthController {
 
     @GetMapping("/profile")
     public UserPublicDto profile() {
-        final UserEntity user = userService.getLoggedInUser().orElse(null);
+        final UserEntity user = userService.getLoggedInUser().orElse(new UserEntity());
         return new UserPublicDto(user);
     }
 }

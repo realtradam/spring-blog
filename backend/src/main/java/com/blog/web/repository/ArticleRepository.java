@@ -5,8 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.HashSet;
+import java.util.List;
 
 public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Query("SELECT a from Article a WHERE a.title LIKE CONCAT('%', :search, '%')")
-    HashSet<Article> searchArticles(String search);
+    List<Article> searchArticles(String search);
 }

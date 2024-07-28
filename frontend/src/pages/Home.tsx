@@ -1,4 +1,4 @@
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, useCallback, FormEvent } from "react";
 
 type article = {
   id: number;
@@ -31,7 +31,7 @@ export default function Home({
     };
 
     const response = await fetch(
-      `${import.meta.env.VITE_API_TITLE}/api/v1/article/delete/${target.id.value}`,
+      `${import.meta.env.VITE_API_TITLE}/api/v1/articles/delete/${target.id.value}`,
       {
         credentials: "include",
         method: "get",
@@ -41,10 +41,12 @@ export default function Home({
       console.log(response);
       alert("check console for error");
     }
+	else {
+		fetchArticles();
+	}
   };
 
-  // pull data when new search is given
-  useEffect(() => {
+  const fetchArticles = useCallback(() => {
     let url;
     if (articleSearch.value === null) {
       //alert("not searched");
@@ -64,6 +66,9 @@ export default function Home({
       })
       .then((response) => setArticles(response));
   }, [articleSearch.value]);
+
+  // pull data when new search is given
+  useEffect(() => { fetchArticles(); } , [articleSearch.value, fetchArticles]);
 
   // when new data is pulled update the articles shown
   useEffect(() => {
