@@ -61,12 +61,14 @@ export default function Layout({
         <nav className="bg-gray-900 p-4 mt-0 w-full">
           <div className="container mx-auto flex items-center">
             <div className="flex text-white font-extrabold">
-              {/*th:if="${(user == null || user.username == null)}"*/}
               <a
                 className="flex text-white text-base no-underline whitespace-nowrap hover:text-white hover:no-underline"
                 href="#"
               >
-                ☕ {user.value === null ? "Spring!" : user.value}
+                ☕{" "}
+                {user.value === null
+                  ? "Spring!"
+                  : `Logged in as: ${user.value}`}
                 <span className="hidden w-0 md:w-auto md:block pl-1"></span>
               </a>
             </div>

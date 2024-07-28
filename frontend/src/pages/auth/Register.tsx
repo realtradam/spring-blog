@@ -36,9 +36,6 @@ export default function Register() {
   return (
     <>
       <div className="flex flex-col items-center justify-center bg-white p-12">
-        <div className="text-xl w-full text-center mb-8 p-4 bg-black text-red-500">
-          Username or Email already exists
-        </div>
         <form onSubmit={handleSubmit} method="post" className="w-full max-w-lg">
           <div className="flex flex-wrap -mx-3 mb-6">
             <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -52,9 +49,6 @@ export default function Register() {
                 name="username"
                 placeholder="Ted"
               />
-              <p className="text-red-500 text-xs italic">
-                Please fill out this field.
-              </p>
             </div>
             <div className="w-full md:w-1/2 px-3">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -67,9 +61,6 @@ export default function Register() {
                 name="email"
                 placeholder="contact@example.com"
               />
-              <p className="text-red-500 text-xs italic">
-                Please fill out this field.
-              </p>
             </div>
           </div>
           <div className="flex flex-wrap -mx-3 mb-6">
@@ -84,9 +75,6 @@ export default function Register() {
                 name="password"
                 placeholder="Doe"
               />
-              <p className="text-red-500 text-xs italic">
-                Please fill out this field.
-              </p>
             </div>
           </div>
           <div className="flex flex-wrap mb-2"></div>

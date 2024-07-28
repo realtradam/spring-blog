@@ -43,15 +43,12 @@ export default function NewArticle() {
                 Title
               </label>
               <input
-                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                className="appearance-none block w-full bg-gray-200 text-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="title"
                 type="text"
                 name="title"
                 placeholder="Yep"
               />
-              <p className="text-red-500 text-xs italic">
-                Please fill out this field.
-              </p>
             </div>
             <div className="w-full md:w-1/2 px-3">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -64,9 +61,6 @@ export default function NewArticle() {
                 name="photoUrl"
                 placeholder="Doe"
               />
-              <p className="text-red-500 text-xs italic">
-                Please fill out this field.
-              </p>
             </div>
           </div>
           <div className="flex flex-wrap -mx-3 mb-6">
@@ -81,9 +75,6 @@ export default function NewArticle() {
                 name="content"
                 placeholder="Doe"
               />
-              <p className="text-red-500 text-xs italic">
-                Please fill out this field.
-              </p>
             </div>
           </div>
           <div className="flex flex-wrap mb-2"></div>

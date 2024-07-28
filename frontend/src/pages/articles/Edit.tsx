@@ -87,9 +87,6 @@ export default function EditArticle() {
                 onChange={handleChange}
                 placeholder="Yep"
               />
-              <p className="text-red-500 text-xs italic">
-                Please fill out this field.
-              </p>
             </div>
             <div className="w-full md:w-1/2 px-3">
               <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2">
@@ -104,9 +101,6 @@ export default function EditArticle() {
                 onChange={handleChange}
                 placeholder="Doe"
               />
-              <p className="text-red-500 text-xs italic">
-                Please fill out this field.
-              </p>
             </div>
           </div>
           <div className="flex flex-wrap -mx-3 mb-6">
@@ -123,9 +117,6 @@ export default function EditArticle() {
                 onChange={handleChange}
                 placeholder="Doe"
               />
-              <p className="text-red-500 text-xs italic">
-                Please fill out this field.
-              </p>
             </div>
           </div>
           <div className="flex flex-wrap mb-2"></div>
