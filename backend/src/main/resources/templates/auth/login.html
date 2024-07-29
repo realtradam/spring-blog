@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="https://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}"
+>
+<body layout:fragment="content">
+
+<div th:if="${param.error}" class="text-xl p-4 bg-black text-red-500">Invalid Username/Password</div>
+<div th:if="${param.logout}" class="text-xl p-4 bg-black text-red-500">You have been logged out</div>
+
+<div class="flex h-full justify-center bg-white p-12">
+    <form th:action="@{/userlogin}" method="post" class="w-full max-w-lg">
+        <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                       for="username">
+                    Title
+                </label>
+                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                       id="username"
+                       type="text"
+                       name="username"
+                       placeholder="Ted">
+            </div>
+        </div>
+        <div class="flex flex-wrap -mx-3 mb-6">
+            <div class="w-full px-3">
+                <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                       for="password">
+                    Password
+                </label>
+                <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                       id="password"
+                       type="password"
+                       name="password"
+                       placeholder="Doe">
+            </div>
+        </div>
+        <div class="flex flex-wrap mb-2">
+        </div>
+        <button type="submit" value="Log in"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Log In
+        </button>
+
+    </form>
+</div>
+
+</body>
+</html>
