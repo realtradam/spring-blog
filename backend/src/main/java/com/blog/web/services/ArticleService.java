@@ -4,11 +4,11 @@ import com.blog.web.dto.ArticleDto;
 import com.blog.web.dto.ArticlePublicDto;
 import com.blog.web.models.Article;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface ArticleService {
-    List<ArticlePublicDto> findAllArticles();
+    Set<ArticlePublicDto> findAllArticles();
 
     Optional<Article> saveArticle(ArticleDto article);
 
@@ -18,9 +18,7 @@ public interface ArticleService {
 
     boolean delete(long articleId);
 
-    //List<ArticleDto> searchArticles(String search);
-
     ArticlePublicDto findArticlePublicById(long articleId);
 
-    List<ArticlePublicDto> searchPublicArticles(String search);
+    Set<ArticlePublicDto> searchPublicArticles(String search);
 }

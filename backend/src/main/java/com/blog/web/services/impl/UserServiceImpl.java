@@ -10,7 +10,8 @@ import com.blog.web.services.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,7 +27,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void saveUser(RegistrationDto registrationDto) {
-        final HashSet<Role> roles = (HashSet<Role>) Set.of(roleRepository.findByName("User").orElse(new Role()));
+        final HashSet<Role> roles = new HashSet<Role>() {{
+            add(roleRepository.findByName("User").get());
+        }};
         userRepository.save(new UserEntity(registrationDto.getUsername(), registrationDto.getEmail(), passwordEncoder.encode(registrationDto.getPassword()), roles));
     }
 
@@ -43,7 +46,7 @@ public class UserServiceImpl implements UserService {
     public Optional<UserEntity> getLoggedInUser() {
         final Optional<UserEntity> user;
         Optional<String> optUsername = Optional.ofNullable(SecurityUtil.getSessionUser());
-        if(optUsername.isPresent()) {
+        if (optUsername.isPresent()) {
             user = this.findByUsername(optUsername.get());
         } else {
             user = Optional.empty();

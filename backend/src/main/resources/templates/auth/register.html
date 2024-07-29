@@ -21,7 +21,8 @@
                        name="username"
                        th:field="*{username}"
                        placeholder="Ted">
-                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-red-500 text-xs italic">Please fill out this field.</p>
+                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="text-red-500 text-xs italic">
+                    Please fill out this field.</p>
             </div>
             <div class="w-full md:w-1/2 px-3">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -34,7 +35,8 @@
                        name="email"
                        th:field="*{email}"
                        placeholder="contact@example.com">
-                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500 text-xs italic">Please fill out this field.</p>
+                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500 text-xs italic">Please
+                    fill out this field.</p>
             </div>
         </div>
         <div class="flex flex-wrap -mx-3 mb-6">
@@ -49,12 +51,15 @@
                        name="password"
                        th:field="*{password}"
                        placeholder="Doe">
-                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-red-500 text-xs italic">Please fill out this field.</p>
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-red-500 text-xs italic">
+                    Please fill out this field.</p>
             </div>
         </div>
         <div class="flex flex-wrap mb-2">
         </div>
-        <button th:href="@{/register}" type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Register</button>
+        <button th:href="@{/register}" type="submit"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Register
+        </button>
 
     </form>
 </div>

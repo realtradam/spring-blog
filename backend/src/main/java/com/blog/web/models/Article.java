@@ -6,12 +6,13 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 public class Article {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final long id;
     private String title;
     private String photoUrl;
     private String content;
@@ -23,7 +24,7 @@ public class Article {
     @JoinColumn(name = "created_by", nullable = false)
     private UserEntity createdBy;
 
-    public Article(Long id, String title, String photoUrl, String content, UserEntity createdBy, LocalDateTime createdOn, LocalDateTime updatedOn) {
+    public Article(long id, String title, String photoUrl, String content, UserEntity createdBy, LocalDateTime createdOn, LocalDateTime updatedOn) {
         this.id = id;
         this.title = title;
         this.photoUrl = photoUrl;
@@ -33,11 +34,8 @@ public class Article {
         this.updatedOn = updatedOn;
     }
 
-    public Article() {
-    }
-
     public Article(ArticleDto articleDto) {
-        this.id = articleDto.getId();
+        this.id = Optional.ofNullable(articleDto.getId()).orElse(0L);
         this.title = articleDto.getTitle();
         this.photoUrl = articleDto.getPhotoUrl();
         this.content = articleDto.getContent();
@@ -46,12 +44,12 @@ public class Article {
         this.updatedOn = articleDto.getUpdatedOn();
     }
 
-    public Long getId() {
-        return id;
+    public Article() {
+        this.id = 0;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public long getId() {
+        return id;
     }
 
     public String getTitle() {

@@ -12,8 +12,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true", allowedHeaders = "*")
 @RestController
@@ -41,8 +41,8 @@ public class ArticleController {
     }
 
     @GetMapping("/articles")
-    public List<ArticlePublicDto> listArticles(@RequestParam(value = "search", required = false) Optional<String> search) {
-        final List<ArticlePublicDto> articles;
+    public Set<ArticlePublicDto> listArticles(@RequestParam(value = "search", required = false) Optional<String> search) {
+        final Set<ArticlePublicDto> articles;
         if (search.isPresent()) {
             articles = articleService.searchPublicArticles(search.get());
         } else {

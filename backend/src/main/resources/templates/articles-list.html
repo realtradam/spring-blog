@@ -5,12 +5,12 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>blah blah</h1>
-    <div th:each="article :${articles}" style="">
-        <div>my aga article</div>
-        <h2 th:text="${article.title}"></h2>
-        <img th:src="${article.photoUrl}" alt="..."/>
-        <p th:text="${article.content}"></p>
-    </div>
+<h1>blah blah</h1>
+<div th:each="article :${articles}" style="">
+    <div>my aga article</div>
+    <h2 th:text="${article.title}"></h2>
+    <img th:src="${article.photoUrl}" alt="..."/>
+    <p th:text="${article.content}"></p>
+</div>
 </body>
 </html>

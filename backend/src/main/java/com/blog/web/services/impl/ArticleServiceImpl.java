@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.blog.web.mappers.ArticleMapper.*;
@@ -32,9 +33,9 @@ public class ArticleServiceImpl implements ArticleService {
 
 
     @Override
-    public List<ArticlePublicDto> findAllArticles() {
+    public Set<ArticlePublicDto> findAllArticles() {
         List<Article> articles = articleRepository.findAll();
-        return articles.stream().map(ArticleMapper::mapToArticlePublicDto).collect(Collectors.toList());
+        return articles.stream().map(ArticleMapper::mapToArticlePublicDto).collect(Collectors.toSet());
     }
 
     @Override
@@ -52,28 +53,35 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public Optional<ArticleDto> findArticleById(long articleId) {
         final Optional<Article> otpArticle = articleRepository.findById(articleId);
-        if(otpArticle.isEmpty()) {
+        if (otpArticle.isEmpty()) {
             return Optional.empty();
-        }
-        else {
+        } else {
             return Optional.of(mapToArticleDto(otpArticle.get()));
         }
     }
 
     @Override
     public void updateArticle(ArticleDto newArticle) {
-        if(newArticle == null) { return; }
+        if (newArticle == null) {
+            return;
+        }
         final Optional<ArticleDto> optExistingArticle = this.findArticleById(newArticle.getId());
-        if(optExistingArticle.isEmpty()) { return; } // cant find article, give up
+        if (optExistingArticle.isEmpty()) {
+            return;
+        } // cant find article, give up
         final ArticleDto existingArticle = optExistingArticle.get();
         Long ownerId = existingArticle.getUserId();
 
         final Optional<UserEntity> optUser = userService.getLoggedInUser();
-        if (optUser.isEmpty()) { return; } // not logged in, not allowed to edit
+        if (optUser.isEmpty()) {
+            return;
+        } // not logged in, not allowed to edit
         final UserEntity user = optUser.get();
         Long userId = user.getId();
 
-        if (!ownerId.equals(userId)) { return; } // logged in a different user, not allowed to edit
+        if (!ownerId.equals(userId)) {
+            return;
+        } // logged in a different user, not allowed to edit
 
         final Article article = mapToArticle(newArticle);
         article.setCreatedBy(user);
@@ -83,16 +91,22 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public boolean delete(long articleId) {
         final Optional<ArticleDto> optArticle = this.findArticleById(articleId);
-        if(optArticle.isEmpty()) { return false; } // cant find article, give up
+        if (optArticle.isEmpty()) {
+            return false;
+        } // cant find article, give up
         final ArticleDto article = optArticle.get();
         String ownerId = article.getUsername();
 
         final Optional<UserEntity> optUser = userService.getLoggedInUser();
-        if (optUser.isEmpty()) { return false; } // not logged in, not allowed to delete
+        if (optUser.isEmpty()) {
+            return false;
+        } // not logged in, not allowed to delete
         final UserEntity user = optUser.get();
         String userId = user.getUsername();
 
-        if (!ownerId.equals(userId)) { return false; } // logged in a different user, not allowed to delete
+        if (!ownerId.equals(userId)) {
+            return false;
+        } // logged in a different user, not allowed to delete
         else {
             articleRepository.deleteById(articleId);
             return true;
@@ -105,8 +119,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticlePublicDto> searchPublicArticles(String search) {
-        List<Article> articles = articleRepository.searchArticles(search);
-        return articles.stream().map(article -> mapToArticlePublicDto(article)).collect(Collectors.toList());
+    public Set<ArticlePublicDto> searchPublicArticles(String search) {
+        Set<Article> articles = articleRepository.searchArticles(search);
+        return articles.stream().map(article -> mapToArticlePublicDto(article)).collect(Collectors.toSet());
     }
 }

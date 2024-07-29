@@ -7,7 +7,8 @@
 <body layout:fragment="content">
 
 <div class="flex justify-center bg-white p-12">
-    <form th:action="@{/articles/edit/{articleId}(articleId=${article.id})}" th:object="${article}" method="post" class="w-full max-w-lg">
+    <form th:action="@{/articles/edit/{articleId}(articleId=${article.id})}" th:object="${article}" method="post"
+          class="w-full max-w-lg">
         <input type="hidden" th:field="*{id}">
         <div class="flex flex-wrap -mx-3 mb-6">
             <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
@@ -21,7 +22,8 @@
                        name="title"
                        th:field="*{title}"
                        placeholder="Yep">
-                <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-red-500 text-xs italic">Please fill out this field.</p>
+                <p th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="text-red-500 text-xs italic">Please
+                    fill out this field.</p>
             </div>
             <div class="w-full md:w-1/2 px-3">
                 <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
@@ -34,7 +36,8 @@
                        name="photoUrl"
                        th:field="*{photoUrl}"
                        placeholder="Doe">
-                <p th:if="${#fields.hasErrors('photoUrl')}" th:errors="*{photoUrl}" class="text-red-500 text-xs italic">Please fill out this field.</p>
+                <p th:if="${#fields.hasErrors('photoUrl')}" th:errors="*{photoUrl}" class="text-red-500 text-xs italic">
+                    Please fill out this field.</p>
             </div>
         </div>
         <div class="flex flex-wrap -mx-3 mb-6">
@@ -49,12 +52,14 @@
                        name="content"
                        th:field="*{content}"
                        placeholder="Doe">
-                <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="text-red-500 text-xs italic">Please fill out this field.</p>
+                <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="text-red-500 text-xs italic">
+                    Please fill out this field.</p>
             </div>
         </div>
         <div class="flex flex-wrap mb-2">
         </div>
-        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update</button>
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update
+        </button>
 
     </form>
 </div>

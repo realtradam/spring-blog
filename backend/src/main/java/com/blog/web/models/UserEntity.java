@@ -1,12 +1,11 @@
 package com.blog.web.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -15,13 +14,18 @@ import java.util.stream.Collectors;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private final long id = 0;
+    @NotEmpty
+    @Column(unique = true)
     private String username;
+    @NotEmpty
+    @Column(unique = true)
     private String email;
+    @NotEmpty
     private String password;
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles", joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")})
-    private Set<Role> roles = new HashSet<>();
+    private final Set<Role> roles = new HashSet<>();
 
     public UserEntity(String username, String email, String password, HashSet<Role> roles) {
         this.username = username;
@@ -39,15 +43,11 @@ public class UserEntity {
     }
 
     public User toSecurityUser() {
-        return new User(this.getEmail(), this.getPassword(), this.getRoles().stream().map((role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
+        return new User(this.getEmail(), this.password, this.getRoles().stream().map((role) -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
     }
 
     public long getId() {
         return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getUsername() {
@@ -64,10 +64,6 @@ public class UserEntity {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public void setPassword(String password) {
